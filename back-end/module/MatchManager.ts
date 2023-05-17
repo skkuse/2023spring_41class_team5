@@ -1,0 +1,3 @@
+class MatchManager {
+  constructor() {}
+}
