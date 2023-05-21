@@ -1,23 +1,37 @@
-import React from "react";
+import React, { useState } from "react";
 
-import { Button, Img, Line, List, Text } from "components";
+import { Img, Line, List, Text } from "components";
 import Banner from "components/Banner";
 
 const Page = () => {
+  const menuArr = [
+    { name: "서비스 소개", content: "Tab menu ONE" },
+    { name: "내 기록 보기", content: "Tab menu TWO" },
+    { name: "전체 순위 보기(Comming soon)", content: "Tab menu THREE" },
+  ];
+  const [currentTab, setCurrentTab] = useState(0);
+  const activeCSS = " text-white_A700 border-b-4 ";
+  const inActiveCSS = "text-gray_500";
+  const selectMenuHandler = (index) => {
+    setCurrentTab(index);
+  };
   return (
     <>
       <Banner />
-      <div className="bg-blue_gray_900 flex flex-row font-dnfbitbitotf items-center justify-start outline outline-gray_600 p-5 w-full">
-        <div className="flex flex-row items-start justify-between ml-[41px] md:px-5 w-[37%]">
-          <Text className="text-center text-white_A700" as="h5" variant="h5">
-            서비스 소개
-          </Text>
-          <Text className="text-center text-white_A700" as="h5" variant="h5">
-            내 기록 보기
-          </Text>
-          <Text className="text-center text-gray_500" as="h5" variant="h5">
-            전체 순위 보기(Comming soon)
-          </Text>
+      <div className="bg-blue_gray_900 flex flex-row font-dnfbitbitotf items-center justify-center outline outline-gray_600 w-full">
+        <div className="flex flex-row items-start justify-start ml-[41px] md:px-5 w-[1450px] gap-12 ">
+          {menuArr.map((el, index) => (
+            <Text
+              className={`text-center cursor-pointer py-4 ${
+                index === currentTab ? activeCSS : inActiveCSS
+              }`}
+              as="h5"
+              variant="h5"
+              onClick={() => selectMenuHandler(index)}
+            >
+              {el.name}
+            </Text>
+          ))}
         </div>
       </div>
       <div className="flex md:flex-col flex-row md:gap-5 items-end justify-start max-w-[1017px] mt-[108px] mx-auto md:px-5 w-full">
