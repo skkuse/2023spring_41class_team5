@@ -1,9 +1,148 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { Button, Img, Line, List, Text } from "components";
 import Footer from "components/Footer";
+import HistoryRow from "components/Home/Histories/HistoryRow";
 
 const Page4 = () => {
+  const expansion = () => {
+    return (
+      <div className="flex md:flex-col flex-row gap-[19px] items-center justify-end md:ml-[0] ml-[50px] w-[96%] md:w-full">
+        <List
+          className="sm:flex-col flex-row gap-5 grid md:grid-cols-1 grid-cols-2 w-[73%] md:w-full"
+          orientation="horizontal"
+        >
+          <div className="bg-gray_900 flex flex-col items-start justify-start sm:ml-[0] p-4 rounded-[5px] w-full">
+            <Text
+              className="mb-[358px] mt-[3px] text-white_A700"
+              variant="body1"
+            >
+              내 코드
+            </Text>
+          </div>
+          <div className="bg-gray_900 flex flex-col items-start justify-start sm:ml-[0] p-[19px] rounded-[5px] w-full">
+            <Text className="mb-[355px] text-white_A700" variant="body1">
+              피드백
+            </Text>
+          </div>
+        </List>
+        <div className="bg-gray_900 flex flex-col items-start justify-start p-[19px] rounded-[5px]">
+          <Text
+            className="mb-[355px] ml-1 md:ml-[0] text-white_A700"
+            variant="body1"
+          >
+            힌트 내용
+          </Text>
+        </div>
+      </div>
+    );
+  };
+  const table = () => {
+    return (
+      <>
+        <div className="flex sm:flex-col flex-row font-pretendard sm:gap-5 items-center justify-start max-w-[1072px] mt-[43px] mx-auto md:px-5 w-full">
+          <Text className="text-center text-white_A700" variant="body1">
+            NO.
+          </Text>
+          <Text
+            className="sm:ml-[0] ml-[213px] text-center text-white_A700"
+            variant="body1"
+          >
+            문제명
+          </Text>
+          <Text
+            className="sm:ml-[0] ml-[262px] text-center text-white_A700"
+            variant="body1"
+          >
+            힌트 사용
+          </Text>
+          <Text
+            className="sm:ml-[0] ml-[100px] text-center text-white_A700"
+            variant="body1"
+          >
+            점수
+          </Text>
+          <Text
+            className="sm:ml-[0] ml-[100px] text-center text-white_A700"
+            variant="body1"
+          >
+            시간
+          </Text>
+          <Text
+            className="sm:ml-[0] ml-[100px] text-center text-white_A700"
+            variant="body1"
+          >
+            승패
+          </Text>
+          <Text
+            className="sm:ml-[0] ml-[100px] text-center text-white_A700"
+            variant="body1"
+          >
+            날짜
+          </Text>
+        </div>
+        <div className="bg-blue_gray_900_01 flex flex-col font-pretendard items-center justify-start max-w-[1160px] mt-[31px] mx-auto p-[17px] md:px-5 w-full">
+          <div className="flex flex-col gap-7 justify-start w-[99%] md:w-full">
+            <HistoryRow />
+          </div>
+        </div>
+      </>
+    );
+  };
+  const row = () => {
+    const [open, setOepn] = useState(false);
+    return (
+      <>
+        <div
+          className="flex md:flex-col flex-row md:gap-5 items-center justify-start mr-[33px] w-[98%] md:w-full"
+          onClick={() => {
+            setOepn((prev) => !prev);
+          }}
+        >
+          <Text className="text-center text-white_A700" variant="body1">
+            1
+          </Text>
+          <Text
+            className="md:ml-[0] ml-[183px] text-center text-white_A700"
+            variant="body1"
+          >
+            고양이 목에 방울 걸기!!!!!!!!!
+          </Text>
+          <Text
+            className="md:ml-[0] ml-[243px] text-center text-white_A700"
+            variant="body1"
+          >
+            2
+          </Text>
+          <Text
+            className="md:ml-[0] ml-[121px] text-center text-white_A700"
+            variant="body1"
+          >
+            100
+          </Text>
+          <Text
+            className="md:ml-[0] ml-[92px] text-center text-white_A700"
+            variant="body1"
+          >
+            -20:22
+          </Text>
+          <Text
+            className="md:ml-[0] ml-[97px] text-center text-white_A700"
+            variant="body1"
+          >
+            승
+          </Text>
+          <Text
+            className="md:ml-[0] ml-[91px] text-center text-white_A700"
+            variant="body1"
+          >
+            23.03.02
+          </Text>
+        </div>
+        {open && expansion()}
+      </>
+    );
+  };
   return (
     <>
       <div className="bg-blue_gray_900 flex flex-col font-dnfbitbitotf items-center justify-start mx-auto w-full">
@@ -108,123 +247,8 @@ const Page4 = () => {
               </Text>
             </div>
           </div>
-          <div className="flex sm:flex-col flex-row font-pretendard sm:gap-5 items-center justify-start max-w-[1072px] mt-[43px] mx-auto md:px-5 w-full">
-            <Text className="text-center text-white_A700" variant="body1">
-              NO.
-            </Text>
-            <Text
-              className="sm:ml-[0] ml-[213px] text-center text-white_A700"
-              variant="body1"
-            >
-              문제명
-            </Text>
-            <Text
-              className="sm:ml-[0] ml-[262px] text-center text-white_A700"
-              variant="body1"
-            >
-              힌트 사용
-            </Text>
-            <Text
-              className="sm:ml-[0] ml-[100px] text-center text-white_A700"
-              variant="body1"
-            >
-              점수
-            </Text>
-            <Text
-              className="sm:ml-[0] ml-[100px] text-center text-white_A700"
-              variant="body1"
-            >
-              시간
-            </Text>
-            <Text
-              className="sm:ml-[0] ml-[100px] text-center text-white_A700"
-              variant="body1"
-            >
-              승패
-            </Text>
-            <Text
-              className="sm:ml-[0] ml-[100px] text-center text-white_A700"
-              variant="body1"
-            >
-              날짜
-            </Text>
-          </div>
-          <div className="bg-blue_gray_900_01 flex flex-col font-pretendard items-center justify-start max-w-[1160px] mt-[31px] mx-auto p-[17px] md:px-5 w-full">
-            <div className="flex flex-col gap-7 justify-start w-[99%] md:w-full">
-              <div className="flex md:flex-col flex-row md:gap-5 items-center justify-start mr-[33px] w-[98%] md:w-full">
-                <Text className="text-center text-white_A700" variant="body1">
-                  1
-                </Text>
-                <Text
-                  className="md:ml-[0] ml-[183px] text-center text-white_A700"
-                  variant="body1"
-                >
-                  고양이 목에 방울 걸기
-                </Text>
-                <Text
-                  className="md:ml-[0] ml-[243px] text-center text-white_A700"
-                  variant="body1"
-                >
-                  2
-                </Text>
-                <Text
-                  className="md:ml-[0] ml-[121px] text-center text-white_A700"
-                  variant="body1"
-                >
-                  100
-                </Text>
-                <Text
-                  className="md:ml-[0] ml-[92px] text-center text-white_A700"
-                  variant="body1"
-                >
-                  -20:22
-                </Text>
-                <Text
-                  className="md:ml-[0] ml-[97px] text-center text-white_A700"
-                  variant="body1"
-                >
-                  승
-                </Text>
-                <Text
-                  className="md:ml-[0] ml-[91px] text-center text-white_A700"
-                  variant="body1"
-                >
-                  23.03.02
-                </Text>
-              </div>
-              <div className="flex md:flex-col flex-row gap-[19px] items-center justify-end md:ml-[0] ml-[50px] w-[96%] md:w-full">
-                <List
-                  className="sm:flex-col flex-row gap-5 grid md:grid-cols-1 grid-cols-2 w-[73%] md:w-full"
-                  orientation="horizontal"
-                >
-                  <div className="bg-gray_900 flex flex-col items-start justify-start sm:ml-[0] p-4 rounded-[5px] w-full">
-                    <Text
-                      className="mb-[358px] mt-[3px] text-white_A700"
-                      variant="body1"
-                    >
-                      내 코드
-                    </Text>
-                  </div>
-                  <div className="bg-gray_900 flex flex-col items-start justify-start sm:ml-[0] p-[19px] rounded-[5px] w-full">
-                    <Text
-                      className="mb-[355px] text-white_A700"
-                      variant="body1"
-                    >
-                      피드백
-                    </Text>
-                  </div>
-                </List>
-                <div className="bg-gray_900 flex flex-col items-start justify-start p-[19px] rounded-[5px]">
-                  <Text
-                    className="mb-[355px] ml-1 md:ml-[0] text-white_A700"
-                    variant="body1"
-                  >
-                    힌트 내용
-                  </Text>
-                </div>
-              </div>
-            </div>
-          </div>
+
+          {table()}
           <List
             className="flex-col font-pretendard gap-[5px] grid items-center max-w-[1160px] mt-3 mx-auto md:px-5 w-full"
             orientation="vertical"

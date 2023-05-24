@@ -3,11 +3,13 @@ import React, { useState } from "react";
 import { Img, Line, List, Text } from "components";
 import Banner from "components/Banner";
 import ServiceIntro from "components/Home/ServiceIntro";
+import MyHistory from "components/Home/MyHistory";
+import HistoryTable from "components/Home/Histories/HistoryTable";
 
 const Page = () => {
   const menuArr = [
     { name: "서비스 소개", content: <ServiceIntro /> },
-    { name: "내 기록 보기", content: "Tab menu TWO" },
+    { name: "내 기록 보기", content: <HistoryTable /> },
     { name: "전체 순위 보기(Comming soon)", content: "Tab menu THREE" },
   ];
   const [currentTab, setCurrentTab] = useState(0);
