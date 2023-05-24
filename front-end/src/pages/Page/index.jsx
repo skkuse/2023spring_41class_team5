@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import { Img, Line, List, Text } from "components";
 import Banner from "components/Banner";
 import ServiceIntro from "components/Home/ServiceIntro";
-import MyHistory from "components/Home/MyHistory";
 import HistoryTable from "components/Home/Histories/HistoryTable";
 
 const Page = () => {
