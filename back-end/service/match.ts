@@ -1,17 +1,42 @@
 import pool from '../util/db'
 
-const createHint = (code: string) => {}
-const createFeedback = (code: string) => {}
-const executeCode = (code: string) => {}
+const getProblemByMatchId = async (mid: number) => {
+  const sql = `SELECT id, title, description FROM problem WHERE id = (SELECT problem_id FROM match WHERE mid = ?;);`
+  const params = [mid]
+  const conn = await pool.getConnection()
+  const [result] = await conn.query(sql, params)
+  const data = result as {
+    id: number
+    title: string
+    description: string
+  }[]
+  if (!data.length) return null
+  return data[0]
+}
 
-const getMatchHistory = (uid: number) => {
-  // DB action: get user history by uid
+const updateScore = async (mid: number, score: number) => {}
+
+const getMatchListByUserId = async (uid: number) => {
+  const sql = `SELECT m.id, p.id, p.title, p.description, h.code, h.score status FROM match WHERE h.id = ?;`
+  const params = [uid]
+  const conn = await pool.getConnection()
+  const [result] = await conn.query(sql, params)
+  // const data = result as {}[]
   const history = [
     {
-      mid: 0,
-      // ...
+      id: 0,
+      problem: {
+        id: 0,
+        title: '',
+        description: '',
+      },
+      status: 'WIN',
+      feedback: {},
+      code: 'asdf',
+      score: 100,
     },
   ]
+  conn.release()
   return history
 }
 const isMatchOnProgress = async (mid: number) => {
@@ -26,7 +51,9 @@ const isMatchOnProgress = async (mid: number) => {
 }
 
 const MatchService = {
-  getMatchHistory,
+  getProblemByMatchId,
+  updateScore,
+  getMatchListByUserId,
   isMatchOnProgress,
 }
 
