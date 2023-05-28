@@ -6,21 +6,21 @@ const configuration = new Configuration({
 ,})
 const openai = new OpenAIApi(configuration);
 
-class GPTManager {
-    async  generateHint(code: any, hintId: number) {
+class ChatGPTModule {
+    async  requestHint(problem: any, type: any ,code: any) {
         let comment = '';
-        if (hintId === 0) {
+        if (type === 0) {
           comment = "Find Code Compile Errors";
-        } else if (hintId === 1) {
+        } else if (type === 1) {
           comment = "Find Next Code";
-        } else if (hintId === 2) {
+        } else if (type === 2) {
           comment = "Generate Test Cases";
         }
       
         const completion = await openai.createChatCompletion({
           model: "gpt-3.5-turbo",
           messages: [
-            { role: "user", content: `${code} ${comment}` }
+            { role: "user", content: `It's about "${problem}" \n ${code} \n ${comment}` }
           ],
           temperature: 1,
         });
@@ -28,9 +28,9 @@ class GPTManager {
         return completion.data.choices[0].message.content.trim();
       }
       
-      async  analyzeCode(code: any, complete: any) {
+      async  requestFeedback(problem: any, code: any, isVictory: any) {
         let comment = '';
-        if (complete) {
+        if (isVictory) {
           comment = "Please improve this code";
         } else {
           comment = "Please complete the code";
@@ -39,7 +39,7 @@ class GPTManager {
         const completion = await openai.createChatCompletion({
           model: "gpt-3.5-turbo",
           messages: [
-            { role: "user", content: `${code} \n ${comment}` }
+            { role: "user", content: `It's about "${problem}" \n ${code} \n ${comment}` }
           ],
           temperature: 1,
         });

@@ -29,7 +29,12 @@ const getHint = async (req: Request, res: Response) => {
 
   const type = req.body.type
   const code = req.body.code
-  // const hint = ChatGPTModule.requestHint(problem, type, code)
+  /*
+const hint = ChatGPTModule.requestHint(problem, type, code)
+type = 0 -> "Find Code Compile Errors"
+type = 1 -> "Find Next Code"
+type = 2 -> "Generate Test Cases"
+*/
   const prompt = ''
   const hint = ''
 
@@ -46,7 +51,11 @@ const getFeedback = async (req: Request, res: Response) => {
   if (!problem) return res.status(404).json({ message: 'No Such Matching' })
 
   const code = req.body.code
-  // const result = ChatGPTModule.requestFeedback(problem, code)
+/*
+const result = ChatGPTModule.requestFeedback(problem, code, isVictory)
+isVictory = True -> "Please improve this code"
+isVictory = False -> "Please complete the code"
+*/
   let result = ''
   const prompt = ''
 
