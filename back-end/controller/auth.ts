@@ -1,16 +1,18 @@
 import { Request, Response } from 'express'
 import UserService from '../service/user'
 
-const createNewUser = (req: Request, res: Response) => {
-  const user = UserService.createUser()
-  return res.json(user)
+const createNewUser = async (req: Request, res: Response) => {
+  const uid = await UserService.createUser()
+  const token = await UserService.getTokenByUserId(uid)
+  return res.json({ id: uid, token })
 }
 
-const login = (req: Request, res: Response) => {
+const login = async (req: Request, res: Response) => {
   const uid = parseInt(req.params.uid)
   // validate user input
-  const token = UserService.getTokenByUserId(uid)
-  return res.json(token)
+  const token = await UserService.getTokenByUserId(uid)
+  if (!token) return res.status(401).json({ message: 'No Such User' })
+  return res.json({ token })
 }
 
 export { createNewUser, login }

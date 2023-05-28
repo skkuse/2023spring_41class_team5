@@ -7,7 +7,7 @@ const getNewMatch = (req: Request, res: Response) => {
 const getHint = (req: Request, res: Response) => {
   return res.json()
 }
-const executeCode = (req: Request, res: Response) => {
+const getFeedback = (req: Request, res: Response) => {
   return res.json()
 }
 const submitCode = (req: Request, res: Response) => {
@@ -17,7 +17,7 @@ const submitCode = (req: Request, res: Response) => {
 const getMyHistory = (req: Request, res: Response) => {
   const uid = 0 // req.uid
   const history = MatchService.getMatchHistory(uid)
-  return res.json(history)
+  return res.json({ history })
 }
 
-export { getNewMatch, getHint, executeCode, submitCode, getMyHistory }
+export { getNewMatch, getHint, getFeedback, submitCode, getMyHistory }
