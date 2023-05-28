@@ -1,28 +1,47 @@
-const createUser = () => {
-  // DB action: create user in db and return uid and token
-  const user = {
-    uid: 0,
-    token: 'aaaaaaaaaa',
-  }
-  return user
+import pool from '../util/db'
+import { getRandomString } from '../util/random'
+
+const createUser = async () => {
+  const sql = `INSERT INTO user (name, auth_token, refresh_token) VALUES (?, ?, ?);`
+  const params = ['tiger', getRandomString(), getRandomString()]
+  const conn = await pool.getConnection()
+  const [result] = await conn.query(sql, params)
+  const data = result as { insertId: number }
+  conn.release()
+  return data.insertId
 }
-const getTokenByUserId = (uid: number) => {
-  // DB action: get token by uid
-  const token = 'bbbbbbbbbb'
-  return token
+const getTokenByUserId = async (uid: number) => {
+  const sql = `SELECT auth_token FROM user WHERE id = ?;`
+  const params = [uid]
+  const conn = await pool.getConnection()
+  const [result] = await conn.query(sql, params)
+  const data = result as { auth_token: string }[]
+  if (data.length) return data[0].auth_token
+  return null
 }
-const getUserInfo = (uid: number) => {
-  // DB action: get user data by uid
-  const user = {
-    uid: 0,
-    // ...
-  }
-  return user
+const getUserIdByToken = async (token: string) => {
+  const sql = `SELECT id FROM user WHERE auth_token = ?;`
+  const params = [token]
+  const conn = await pool.getConnection()
+  const [result] = await conn.query(sql, params)
+  const data = result as { id: string }[]
+  if (data.length) return data[0].id
+  return null
+}
+const getUserInfo = async (uid: number) => {
+  const sql = `SELECT id, auth_token FROM user WHERE id = ?;`
+  const params = [uid]
+  const conn = await pool.getConnection()
+  const [result] = await conn.query(sql, params)
+  const data = result as { id: number; name: string }[]
+  if (data.length) return data[0]
+  return null
 }
 
 const UserService = {
   createUser,
   getTokenByUserId,
+  getUserIdByToken,
   getUserInfo,
 }
 
