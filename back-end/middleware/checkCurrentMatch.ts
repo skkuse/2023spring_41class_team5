@@ -1,8 +1,16 @@
 import { NextFunction, Request, Response } from 'express'
+import MatchService from '../service/match'
 
-const checkCurrentMatch = (req: Request, res: Response, next: NextFunction) => {
-  //   const uid = req.uid
-  // DB action: get current match by uid
+const checkCurrentMatch = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const mid = parseInt(req.params.mid)
+  if (!mid) return res.status(404).json({ message: 'No Such Matching' })
+  const isOnProgress = MatchService.isMatchOnProgress(mid)
+  if (!isOnProgress)
+    return res.status(404).json({ message: 'No Such Matching' })
   next()
 }
 

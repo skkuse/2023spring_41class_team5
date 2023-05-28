@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import checkToken from '../middleware/checkToken'
 import {
-  executeCode,
+  getFeedback,
   getHint,
   getMyHistory,
   getNewMatch,
@@ -22,11 +22,6 @@ match.get('/new-match', checkToken, getNewMatch)
 match.post('/:mid/hint', checkToken, checkCurrentMatch, getHint)
 
 /**
- * execute the code
- */
-match.post('/:mid/execute', checkToken, checkCurrentMatch, executeCode)
-
-/**
  * submit the code
  */
 match.post('/:mid/submit', checkToken, checkCurrentMatch, submitCode)
@@ -35,5 +30,10 @@ match.post('/:mid/submit', checkToken, checkCurrentMatch, submitCode)
  * get history
  */
 match.get('/history', checkToken, getMyHistory)
+
+/**
+ * get feedback
+ */
+match.post('/:mid/feedback', checkToken, getFeedback)
 
 export default match
