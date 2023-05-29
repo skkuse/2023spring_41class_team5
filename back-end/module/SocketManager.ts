@@ -19,7 +19,7 @@ class SocketManagerClass {
     params: any
   ) {
     if (!this.socket) return
-    this.socket.to(mid.toString()).emit(type, params)
+    this.socket.in(mid.toString()).emit(type, params)
   }
 }
 
