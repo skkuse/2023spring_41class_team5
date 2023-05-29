@@ -81,7 +81,7 @@ const getHint = async (req: Request, res: Response) => {
     uid: uid,
     hintCount: hintCount + 1,
   })
-  return res.json({ type: type, result: hint })
+  return res.json({ type, hint })
 }
 const getFeedback = async (req: Request, res: Response) => {
   const uid = req.user
@@ -98,7 +98,7 @@ const getFeedback = async (req: Request, res: Response) => {
   const prompt = ''
 
   await FeedbackService.createFeedback(mid, uid, prompt, result)
-  return res.json({ result })
+  return res.json({ feedback: result })
 }
 const submitCode = async (req: Request, res: Response) => {
   const uid = req.user
