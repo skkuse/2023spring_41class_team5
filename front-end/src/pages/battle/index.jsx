@@ -78,29 +78,30 @@ const Battle = () => {
                     Hint{" "}
                   </Text>
                   <div className="flex sm:flex-col flex-row sm:gap-10 items-center justify-between w-full">
-                    <div className="bg-blue_700 flex flex-col items-start justify-end p-2.5 rounded-[5px]">
-                      <Text
-                        className="ml-4 md:ml-[0] text-white_A700"
-                        as="h3"
-                        variant="h3"
-                      >
-                        질문?
-                      </Text>
-                    </div>
-                    <Text
-                      className="bg-blue_700 h-11 justify-center pl-[27px]  sm:px-5 py-2.5 rounded-[5px] text-white_A700 w-[147px]"
-                      as="h3"
-                      variant="h3"
+                    <Button
+                      className="bg-blue-700 cursor-pointer font-normal leading-[normal] min-w-[151px] text-center text-white_A700 text-l"
+                      shape="RoundedBorder5"
+                      size="sm"
+                      variant="FillTealA70001"
+                    >
+                      질문
+                    </Button>
+                    <Button
+                      className="bg-blue-700 cursor-pointer font-normal leading-[normal] min-w-[151px] text-center text-white_A700 text-l"
+                      shape="RoundedBorder5"
+                      size="sm"
+                      variant="FillTealA70001"
                     >
                       먹물 30초
-                    </Text>
-                    <Text
-                      className="bg-blue_700 h-11 justify-center pb-2 pl-[21px] pt-[13px] sm:px-5 rounded-[5px] text-white_A700 w-[147px]"
-                      as="h3"
-                      variant="h3"
+                    </Button>
+                    <Button
+                      className="bg-blue-700 cursor-pointer font-normal leading-[normal] min-w-[151px] text-center text-white_A700 text-l"
+                      shape="RoundedBorder5"
+                      size="sm"
+                      variant="FillTealA70001"
                     >
                       다음 줄 작성
-                    </Text>
+                    </Button>
                   </div>
                 </div>
               </div>
