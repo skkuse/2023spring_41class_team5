@@ -7,7 +7,7 @@ const Page2 = () => {
   const navigate = useNavigate();
   useEffect(() => {
     const timeoutId = setTimeout(() => {
-      navigate("/battle");
+      navigate("/battle", { replace: true });
     }, 2000);
 
     return () => clearTimeout(timeoutId);
