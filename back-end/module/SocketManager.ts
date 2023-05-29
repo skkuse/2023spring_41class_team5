@@ -7,6 +7,11 @@ class SocketManagerClass {
   }
   init(server: any) {
     this.socket = new Server(server, {})
+    this.socket.on('connection', (socket) => {
+      socket.on('JOIN_ROOM', (id) => {
+        socket.join(id)
+      })
+    })
   }
   emitEvent(
     mid: number,

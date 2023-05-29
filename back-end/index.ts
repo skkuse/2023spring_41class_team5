@@ -8,6 +8,7 @@ import SocketManager from './module/SocketManager'
 
 const app = express()
 
+app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 app.use(cors({ origin: '*' }))
 app.use(router)

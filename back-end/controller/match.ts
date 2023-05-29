@@ -74,7 +74,7 @@ const getHint = async (req: Request, res: Response) => {
   const code = req.body.code
   // const hint = ChatGPTModule.requestHint(problem, type, code)
   const prompt = ''
-  const hint = ''
+  const hint = 'hint result...'
 
   await HintService.createHint(mid, uid, type, prompt, hint)
   SocketManager.emitEvent(mid, 'HINT_UPDATED', {
@@ -89,10 +89,12 @@ const getFeedback = async (req: Request, res: Response) => {
   const mid = parseInt(req.params.mid)
   if (!mid) return res.status(404).json({ message: 'No Such Matching' })
   const match = await MatchService.getMatchById(mid)
-
+  const isWin =
+    (match?.status === 1 && match.user1 === uid) ||
+    (match?.status === 2 && match.user2 === uid)
   const code = req.body.code
   // const result = ChatGPTModule.requestFeedback(match.problem, code)
-  let result = ''
+  let result = 'feedback result...'
   const prompt = ''
 
   await FeedbackService.createFeedback(mid, uid, prompt, result)
@@ -107,7 +109,7 @@ const submitCode = async (req: Request, res: Response) => {
   if (!problem) return res.status(404).json({ message: 'No Such Matching' })
 
   const code = req.body.code as string
-
+  console.log(code)
   // const score = await ExecutionManager.run(code, problem.testCase)
   let score = 80
   if (score === 100) {
@@ -118,7 +120,7 @@ const submitCode = async (req: Request, res: Response) => {
       win: uid,
     })
   } else {
-    MatchService.updateSummitResult(mid, uid, code, score)
+    await MatchService.updateSummitResult(mid, uid, code, score)
     SocketManager.emitEvent(mid, 'SCORE_UPDATED', {
       uid: uid,
       score: score,
@@ -128,10 +130,10 @@ const submitCode = async (req: Request, res: Response) => {
   return res.json({ score })
 }
 
-const getMyHistory = (req: Request, res: Response) => {
+const getMyHistory = async (req: Request, res: Response) => {
   const uid = req.user
   if (!uid) return
-  const history = MatchService.getMatchListByUserId(uid)
+  const history = await MatchService.getMatchListByUserId(uid)
   return res.json({ history })
 }
 
