@@ -13,8 +13,32 @@ const getProblemByMatchId = async (mid: number) => {
   if (!data.length) return null
   return data[0]
 }
+const getMatchById = async (mid: number) => {
+  return { id: 0, problem: { id: 0, title: '', description: '' }, status: '' }
+}
 
-const updateScore = async (mid: number, score: number) => {}
+const updateMatchStatus = async (mid: number, win: number) => {
+  if (win === -1) {
+    // 누군가 나가서 무승부
+  }
+}
+
+const createMatch = async (uid1: number, uid2: number, pid: number) => {
+  return 0
+}
+
+const getMatchOnProgress = async (uid: number) => {
+  return { id: 0, problem: { id: 0, title: '', description: '' }, status: '' }
+}
+
+const updateSummitResult = async (
+  mid: number,
+  uid: number,
+  code: string,
+  score: number
+) => {
+  const sql = `SELECT `
+}
 
 const getMatchListByUserId = async (uid: number) => {
   const sql = `SELECT m.id, p.id, p.title, p.description, h.code, h.score status FROM match WHERE h.id = ?;`
@@ -52,7 +76,11 @@ const isMatchOnProgress = async (mid: number) => {
 
 const MatchService = {
   getProblemByMatchId,
-  updateScore,
+  getMatchById,
+  updateMatchStatus,
+  createMatch,
+  getMatchOnProgress,
+  updateSummitResult,
   getMatchListByUserId,
   isMatchOnProgress,
 }

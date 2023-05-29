@@ -1,7 +1,5 @@
 import pool from '../util/db'
 
-const getFeedbackById = async (fid: number) => {}
-
 const createFeedback = async (
   mid: number,
   uid: number,
@@ -16,6 +14,6 @@ const createFeedback = async (
   return true
 }
 
-const FeedbackService = { getFeedbackById, createFeedback }
+const FeedbackService = { createFeedback }
 
 export default FeedbackService

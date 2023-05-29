@@ -2,18 +2,61 @@ import { Request, Response } from 'express'
 import MatchService from '../service/match'
 import HintService from '../service/hint'
 import FeedbackService from '../service/feedback'
+import MatchManager from '../module/MatchManager'
+import SocketManager from '../module/SocketManager'
 
 const getNewMatch = async (req: Request, res: Response) => {
-  // 1. 현재 진행중인 대결이 있는지 확인 -> 해당 대결 리턴
-  // 2. 현재 대기열에 적절한 상대가 있는지 확인 -> 해당 상대와 자신의 대결을 생성.
-  // 3. 대기열에 추가
-  // 4. 3초 안에 요청이 다시 오지 않으면 대기열에서 삭제
-  return res.json()
+  const uid = req.user
+  if (!uid) return
+  // 1. 현재 진행중인 대결이 있는지 확인
+  const match = await MatchService.getMatchOnProgress(uid)
+  if (match) return res.json({ match }) // -> 해당 대결 리턴
+  // 2. 현재 대기열에 적절한 상대가 있는지 확인
+  const target = MatchManager.findQueue()
+  if (target) {
+    // -> 해당 상대와 자신의 대결을 생성 후 리턴
+    const mid = await MatchService.createMatch(target, uid, 1) // 문제는 1번으로 고정
+    MatchManager.deleteQueue(target)
+    MatchManager.insertMatch(
+      mid,
+      target,
+      uid,
+      () => {
+        MatchService.updateMatchStatus(mid, -1)
+        SocketManager.emitEvent(mid, 'MATCH_ENDED', {
+          win: null,
+          disconnected: target,
+        })
+      },
+      () => {
+        MatchService.updateMatchStatus(mid, -1)
+        SocketManager.emitEvent(mid, 'MATCH_ENDED', {
+          win: null,
+          disconnected: uid,
+        })
+      }
+    )
+    const newMatch = await MatchService.getMatchById(mid)
+    return res.json({ match: newMatch })
+  } else {
+    // -> 대기열에 추가
+    MatchManager.insertQueue(uid)
+    return res.json({ match: null })
+  }
 }
 const healthCheck = async (req: Request, res: Response) => {
-  // 1분마다 요청
-  // 3분 안에 주기적으로 요청이 오지 않으면 게임 종료
-  return res.json()
+  const uid = req.user
+  if (!uid) return
+  const mid = parseInt(req.params.id)
+  if (!mid) return res.status(404).json({ message: 'No Such Matching' })
+  MatchManager.healthCheck(mid, uid, () => {
+    MatchService.updateMatchStatus(mid, -1)
+    SocketManager.emitEvent(mid, 'MATCH_ENDED', {
+      win: null,
+      disconnected: uid,
+    })
+  })
+  return res.json({ id: mid })
 }
 
 const getHint = async (req: Request, res: Response) => {
@@ -34,27 +77,30 @@ const getHint = async (req: Request, res: Response) => {
   const hint = ''
 
   await HintService.createHint(mid, uid, type, prompt, hint)
-  // TODO: hint event emit
-  return res.json({ hint })
+  SocketManager.emitEvent(mid, 'HINT_UPDATED', {
+    uid: uid,
+    hintCount: hintCount + 1,
+  })
+  return res.json({ type: type, result: hint })
 }
 const getFeedback = async (req: Request, res: Response) => {
   const uid = req.user
   if (!uid) return
   const mid = parseInt(req.params.mid)
   if (!mid) return res.status(404).json({ message: 'No Such Matching' })
-  const problem = await MatchService.getProblemByMatchId(mid)
-  if (!problem) return res.status(404).json({ message: 'No Such Matching' })
+  const match = await MatchService.getMatchById(mid)
 
   const code = req.body.code
-  // const result = ChatGPTModule.requestFeedback(problem, code)
+  // const result = ChatGPTModule.requestFeedback(match.problem, code)
   let result = ''
   const prompt = ''
 
   await FeedbackService.createFeedback(mid, uid, prompt, result)
-  const feedback = await FeedbackService.getFeedbackById(0)
-  return res.json({ feedback })
+  return res.json({ result })
 }
 const submitCode = async (req: Request, res: Response) => {
+  const uid = req.user
+  if (!uid) return
   const mid = parseInt(req.params.mid)
   if (!mid) return res.status(404).json({ message: 'No Such Matching' })
   const problem = await MatchService.getProblemByMatchId(mid)
@@ -65,16 +111,21 @@ const submitCode = async (req: Request, res: Response) => {
   // const score = await ExecutionManager.run(code, problem.testCase)
   let score = 80
   if (score === 100) {
-    // 게임 종료
-    // update game status
-    // update score
-    // end event emit
+    // TODO: this two trx should be in one trx
+    await MatchService.updateMatchStatus(mid, uid)
+    await MatchService.updateSummitResult(mid, uid, code, score)
+    SocketManager.emitEvent(mid, 'MATCH_ENDED', {
+      win: uid,
+    })
   } else {
-    // update score
-    // score event emit
+    MatchService.updateSummitResult(mid, uid, code, score)
+    SocketManager.emitEvent(mid, 'SCORE_UPDATED', {
+      uid: uid,
+      score: score,
+    })
   }
 
-  return res.json(score)
+  return res.json({ score })
 }
 
 const getMyHistory = (req: Request, res: Response) => {
