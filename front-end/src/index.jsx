@@ -5,7 +5,6 @@ import ReactDOM from "react-dom";
 import App from "./App";
 import "./styles/index.css";
 import "./styles/tailwind.css";
-import Header from "components/Headercodedino/Header";
 ReactDOM.render(
   <React.StrictMode>
     <App />

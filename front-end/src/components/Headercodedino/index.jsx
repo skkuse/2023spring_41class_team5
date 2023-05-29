@@ -1,12 +1,16 @@
 import React from "react";
 
 import { Img, Text } from "components";
+import { Link } from "react-router-dom";
 
 const Headercodedino = (props) => {
   return (
     <>
       <header className={props.className}>
-        <div className="flex flex-row gap-1.5 items-start justify-center mb-2 md:ml-[0] ml-[60px] md:mt-0 mt-3 w-[11%] md:w-full">
+        <Link
+          to="/"
+          className="flex flex-row gap-1.5 items-start justify-center mb-2 md:ml-[0] ml-[60px] md:mt-0 mt-3 w-[11%] md:w-full"
+        >
           <Text
             className="font-dnfbitbitotf mt-0.5 text-center text-white_A700"
             as="h3"
@@ -19,7 +23,7 @@ const Headercodedino = (props) => {
             className="h-[30px] w-[30px]"
             alt="settings"
           />
-        </div>
+        </Link>
         <Text
           className="font-pretendard md:ml-[0] ml-[893px] md:mt-0 my-4 text-center text-white_A700"
           variant="body1"

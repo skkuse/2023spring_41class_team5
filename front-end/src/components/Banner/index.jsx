@@ -1,5 +1,6 @@
 import { Button, Img } from "components";
 import React from "react";
+import { Link } from "react-router-dom";
 
 const Banner = () => {
   return (
@@ -39,14 +40,16 @@ const Banner = () => {
               className="h-[45px]"
               alt="twitter_Two"
             />
-            <Button
-              className="cursor-pointer font-bold leading-[normal] min-w-[204px] mt-[13px] text-[15px] text-black_900 text-center"
-              shape="RoundedBorder5"
-              size="sm"
-              variant="FillWhiteA700"
-            >
-              로그인하고 매칭 시작하기
-            </Button>
+            <Link to="page2">
+              <Button
+                className="cursor-pointer font-bold leading-[normal] min-w-[204px] mt-[13px] text-[15px] text-black_900 text-center"
+                shape="RoundedBorder5"
+                size="sm"
+                variant="FillWhiteA700"
+              >
+                로그인하고 매칭 시작하기
+              </Button>
+            </Link>
           </div>
         </div>
         <div className="flex md:flex-1 flex-col gap-2 justify-start md:mt-0 mt-[52px] w-[14%] md:w-full">
