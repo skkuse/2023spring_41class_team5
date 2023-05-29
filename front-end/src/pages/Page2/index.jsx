@@ -1,11 +1,17 @@
 import React, { useEffect } from "react";
 
 import { Text } from "components";
+import { useNavigate } from "react-router";
 
 const Page2 = () => {
+  const navigate = useNavigate();
   useEffect(() => {
-    alert("hello world");
-  }, []);
+    const timeoutId = setTimeout(() => {
+      navigate("/battle");
+    }, 2000);
+
+    return () => clearTimeout(timeoutId);
+  }, [navigate]);
   return (
     <>
       <div className="bg-blue_gray_900 flex flex-col font-dnfbitbitotf items-center justify-end mx-auto w-full">
