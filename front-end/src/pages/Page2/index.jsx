@@ -2,13 +2,14 @@ import React, { useEffect } from "react";
 
 import { Text } from "components";
 import { useNavigate } from "react-router";
+import LoadingBar from "components/LoadingBar/LoadingBar";
 
 const Page2 = () => {
   const navigate = useNavigate();
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       navigate("/battle", { replace: true });
-    }, 2000);
+    }, 3000);
 
     return () => clearTimeout(timeoutId);
   }, [navigate]);
@@ -37,7 +38,7 @@ const Page2 = () => {
                 가까운 사람과 대결해요!
               </>
             </Text>
-            <div className="bg-gray_700_01 border border-gray_400 border-solid h-[15px] mt-[41px] rounded-[7px] w-[88%]"></div>
+            <LoadingBar />
             <Text
               className="font-pretendard mt-2.5 text-center text-white_A700"
               as="h4"
