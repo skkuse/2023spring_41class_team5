@@ -1,11 +1,31 @@
 import { Button, Img, Text } from "components";
-import React from "react";
+import React, { useState } from "react";
 import CodeEditor from "@uiw/react-textarea-code-editor";
+import Feedback from "components/Feedback/Feedback";
 const Battle = () => {
   const [code, setCode] = React.useState(
     `function add(a, b) {\n  return a + b;\n}`
   );
-  return (
+  const feedback = `<>
+                      알고리즘 부분:                      <br />                      코드의 실행 시간이 상당히 오래 걸렸습니다. 특히 입력
+                      크기가 큰 경우에는 성능이 저하될 수 있습니다.
+                      <br />
+                      일부 반복문이 중복되거나 비효율적으로 작성되었습니다. 이로
+                      인해 코드가 더 길어지고 가독성이 떨어집니다.
+                      <br />
+                      코드 간결성 부분:
+                      <br />
+                      변수명이 명확하지 않거나 일관성이 없습니다. 변수 이름을 더
+                      명확하고 의미 있는 단어로 선택하는 것이 좋습니다.
+                      <br />
+                      코드가 길고 복잡해 보입니다. 불필요한 중첩이나 복잡한
+                      조건문을 줄이고, 코드를 간결하게 리팩토링하는 것이
+                      좋습니다.
+                    </>`;
+  const [isGameOver, setIsGameOver] = useState(false);
+  return isGameOver ? (
+    <Feedback code={code} feedback={feedback} />
+  ) : (
     <>
       <div className="flex flex-col items-start justify-start max-w-[1156px] mx-auto md:px-5 w-full mt-5">
         <div className="flex md:flex-col flex-row font-dnfbitbitotf md:gap-5 items-start justify-start w-full">
@@ -169,6 +189,9 @@ const Battle = () => {
                   shape="RoundedBorder5"
                   size="sm"
                   variant="FillTealA70001"
+                  onClick={() => {
+                    setIsGameOver(true);
+                  }}
                 >
                   제출
                 </Button>
