@@ -16,7 +16,7 @@ class MatchManagerClass {
   }
   findQueue() {
     if (!this.queue.length) return null
-    else this.queue[0].id
+    else return this.queue[0].id
   }
   insertQueue(id: number) {
     const target = this.queue.find((i) => i.id === id)
