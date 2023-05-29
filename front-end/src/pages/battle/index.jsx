@@ -154,17 +154,18 @@ const Battle = () => {
             </div>
             <div className="flex flex-row gap-[55px] items-start justify-end md:ml-[0] ml-[109px] w-[68%] md:w-full">
               <div className="flex flex-col items-center justify-start mt-0.5">
-                <Text
-                  className="bg-blue_700 h-11 justify-center sm:px-5 pl-[34px] py-2.5 rounded-[5px] text-white_A700 w-[151px]"
-                  as="h3"
-                  variant="h3"
+                <Button
+                  className="bg-blue-500 cursor-pointer font-normal leading-[normal] min-w-[151px] text-center text-white_A700 text-l"
+                  shape="RoundedBorder5"
+                  size="sm"
+                  variant="FillTealA70001"
                 >
                   코드 실행
-                </Text>
+                </Button>
               </div>
               <div className="flex flex-col items-center justify-start mb-0.5 w-[43%]">
                 <Button
-                  className="cursor-pointer font-normal leading-[normal] min-w-[151px] text-center text-white_A700 text-xl"
+                  className="bg-green-500 cursor-pointer font-normal leading-[normal] min-w-[151px] text-center text-white_A700 text-l"
                   shape="RoundedBorder5"
                   size="sm"
                   variant="FillTealA70001"
