@@ -1,7 +1,10 @@
 import { Button, Img, Text } from "components";
 import React from "react";
-
+import CodeEditor from "@uiw/react-textarea-code-editor";
 const Battle = () => {
+  const [code, setCode] = React.useState(
+    `function add(a, b) {\n  return a + b;\n}`
+  );
   return (
     <>
       <div className="flex flex-col items-start justify-start max-w-[1156px] mx-auto md:px-5 w-full mt-5">
@@ -88,11 +91,18 @@ const Battle = () => {
           <div className="flex md:flex-1 flex-col items-start justify-start w-1/2 md:w-full">
             <div className="bg-blue_gray_900_01 border border-gray_600 border-solid flex flex-col font-dnfbitbitotf items-start justify-start p-[18px] rounded-[5px] w-full">
               <Text
-                className="mb-[260px] md:ml-[0] ml-[7px] text-teal_A700_01"
+                className="mb-[10px] md:ml-[0] ml-[7px] text-teal_A700_01"
                 as="h3"
                 variant="h3"
               >
                 Problem
+              </Text>
+              <Text
+                className="font-pretendard mb-[118px] text-white_A700 w-[96%] sm:w-full"
+                as="h4"
+                variant="h4"
+              >
+                problem
               </Text>
             </div>
             <div className="bg-blue_gray_900_01 border border-gray_600 border-solid flex flex-col gap-[35px] items-start justify-center mt-[18px] p-8 sm:px-5 rounded-[5px] w-full">
@@ -117,35 +127,29 @@ const Battle = () => {
           </div>
           <div className="flex md:flex-1 flex-col gap-5 justify-start w-[46%] md:w-full">
             <div className="bg-blue_gray_900_01 border border-gray_600 border-solid flex flex-col items-start justify-start p-4 rounded-[5px] w-full">
-              <div className="flex flex-col gap-[18px] items-start justify-start mb-24 ml-3.5 md:ml-[0] w-[82%] md:w-full">
+              <div className="flex flex-col gap-[18px] items-start justify-start mb-24 ml-3.5 md:ml-[0] w-full md:w-full">
                 <div className="flex flex-row font-dnfbitbitotf items-start justify-between w-full">
                   <Text className="text-teal_A700_01" as="h3" variant="h3">
                     Solution
                   </Text>
-                  <Text className="text-white_A700" as="h3" variant="h3">
-                    python
+                  <Text className="text-white_A700 mr-3.5" as="h3" variant="h3">
+                    javascript
                   </Text>
                 </div>
-                <Text
-                  className="font-pretendard text-white_A700"
-                  as="h4"
-                  variant="h4"
-                >
-                  <>
-                    #include &lt;stdio.h&gt;
-                    <br />
-                    #define LEN_INPUT 1000001
-                    <br />
-                    <br />
-                    int main(void) &#123;
-                    <br /> char s1[LEN_INPUT];
-                    <br /> scanf(&quot;%s&quot;, s1);
-                    <br />
-                    <br /> return 0;
-                    <br />
-                    &#125;
-                  </>
-                </Text>
+                <CodeEditor
+                  className="w-[90%]"
+                  value={code}
+                  language="js"
+                  placeholder="Please enter JS code."
+                  onChange={(evn) => setCode(evn.target.value)}
+                  padding={15}
+                  style={{
+                    fontSize: 14,
+                    backgroundColor: "#202020",
+                    fontFamily:
+                      "ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace",
+                  }}
+                />
               </div>
             </div>
             <div className="flex flex-row gap-[55px] items-start justify-end md:ml-[0] ml-[109px] w-[68%] md:w-full">
