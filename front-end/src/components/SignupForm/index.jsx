@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Input } from 'components';
+import { Input, Button } from 'components';
 
 function SignupForm() {
   const [email, setEmail] = useState('');
@@ -20,23 +20,27 @@ function SignupForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <Input
-        label="Email"
-        type="email"
-        value={email}
-        onChange={handleEmailChange}
-      />
+    <div className="signup-form-container">
+      <form onSubmit={handleSubmit} className="signup-form">
+        <Input
+          label="Email: "
+          type="email"
+          value={email}
+          onChange={handleEmailChange}
+        />
 
-      <Input
-        label="Password"
-        type="password"
-        value={password}
-        onChange={handlePasswordChange}
-      />
+        <Input
+          label="Password: "
+          type="password"
+          value={password}
+          onChange={handlePasswordChange}
+        />
 
-      <button type="submit">회원가입</button>
-    </form>
+        <Button className='w-full' type="submit" variant="FillBlue70001" shape="RoundedBorder5" size="sm">
+          Sign Up
+        </Button>
+      </form>
+    </div>
   );
 }
 
