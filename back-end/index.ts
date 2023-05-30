@@ -13,7 +13,7 @@ app.use(bodyParser.json())
 app.use(cors({ origin: '*' }))
 app.use(router)
 
-const server = app.listen(process.env.PORT, () => {
+const server = app.listen(process.env.PORT || 3000, () => {
   console.log('Server Start')
 })
 
