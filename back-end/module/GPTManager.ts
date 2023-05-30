@@ -1,4 +1,3 @@
-require('dotenv').config();
 const { Configuration, OpenAIApi} = require("openai");
 
 const configuration = new Configuration({
@@ -6,7 +5,7 @@ const configuration = new Configuration({
 ,})
 const openai = new OpenAIApi(configuration);
 
-class ChatGPTModule {
+class ChatGPTManager {
     async  requestHint(problem: any, type: any ,code: any) {
         let comment = '';
         if (type === 0) {
@@ -24,8 +23,9 @@ class ChatGPTModule {
           ],
           temperature: 1,
         });
-      
-        return completion.data.choices[0].message.content.trim();
+        const hint = completion.data.choices[0].message.content.trim()
+        const prompt = comment
+        return {hint,prompt};
       }
       
       async  requestFeedback(problem: any, code: any, isVictory: any) {
@@ -43,7 +43,12 @@ class ChatGPTModule {
           ],
           temperature: 1,
         });
-      
-        return completion.data.choices[0].message.content.trim();
+        const result = completion.data.choices[0].message.content.trim()
+        const prompt = comment
+        return {result,prompt};
       }
 }
+
+const ChatGPTModule = new ChatGPTManager()
+
+export default ChatGPTModule
