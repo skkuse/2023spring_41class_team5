@@ -9,6 +9,7 @@ const createNewUser = async (req: Request, res: Response) => {
 
 const login = async (req: Request, res: Response) => {
   const uid = parseInt(req.params.uid)
+  if (!uid) return
   // validate user input
   const token = await UserService.getTokenByUserId(uid)
   if (!token) return res.status(401).json({ message: 'No Such User' })

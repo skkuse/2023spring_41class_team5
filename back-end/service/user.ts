@@ -3,7 +3,11 @@ import { getRandomString } from '../util/random'
 
 const createUser = async () => {
   const sql = `INSERT INTO user (name, auth_token, refresh_token) VALUES (?, ?, ?);`
-  const params = ['tiger', getRandomString(), getRandomString()]
+  const params = [
+    'dino-' + getRandomString().slice(0, 6),
+    getRandomString(),
+    getRandomString(),
+  ]
   const conn = await pool.getConnection()
   const [result] = await conn.query(sql, params)
   const data = result as { insertId: number }
@@ -29,12 +33,17 @@ const getUserIdByToken = async (token: string) => {
   return null
 }
 const getUserInfo = async (uid: number) => {
-  const sql = `SELECT id, auth_token FROM user WHERE id = ?;`
+  const sql = `SELECT id, name, auth_token FROM user WHERE id = ?;`
   const params = [uid]
   const conn = await pool.getConnection()
   const [result] = await conn.query(sql, params)
-  const data = result as { id: number; name: string }[]
-  if (data.length) return data[0]
+  const data = result as { id: number; name: string; auth_token: string }[]
+  if (data.length)
+    return {
+      id: data[0].id,
+      name: data[0].name,
+      token: data[0].auth_token,
+    }
   return null
 }
 

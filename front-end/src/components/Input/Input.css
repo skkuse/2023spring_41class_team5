@@ -1,0 +1,39 @@
+.signup-form-container {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+
+.signup-form {
+    width: 80%;
+    padding: 30px;
+    background: white;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.input-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.input-label {
+    width: 100px;
+    font-size: 1em;
+    color: #333;
+}
+
+.input-field {
+    flex: 1;
+    padding: 10px;
+    border: 2px solid #3bff79;
+    mask-border: 2px solid #3bff79;
+    border-radius: 3px;
+}
+
+
+.input-field.password-mismatch {
+    border: 2px solid red;
+}
