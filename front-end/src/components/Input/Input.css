@@ -5,6 +5,7 @@
     align-items: center;
 }
 
+
 .signup-form {
     width: 80%;
     padding: 30px;
@@ -27,6 +28,12 @@
 .input-field {
     flex: 1;
     padding: 10px;
-    border: 1px solid #ddd;
+    border: 2px solid #3bff79;
+    mask-border: 2px solid #3bff79;
     border-radius: 3px;
+}
+
+
+.input-field.password-mismatch {
+    border: 2px solid red;
 }

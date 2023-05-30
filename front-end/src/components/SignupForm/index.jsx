@@ -5,7 +5,7 @@ function SignupForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
-  const [isMismatch, setMismatch] = useState(false);  // 상태값 추가
+  const [isMismatch, setMismatch] = useState(false);
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -45,7 +45,7 @@ function SignupForm() {
           label="Password: "
           type="password"
           value={password}
-          className={isMismatch ? 'password-mismatch' : ''} // 상태값에 따라 클래스 부여
+          className={isMismatch ? 'password-mismatch' : ''}
           onChange={handlePasswordChange}
         />
 
@@ -53,7 +53,7 @@ function SignupForm() {
           label="Confirm Password: "
           type="password"
           value={passwordConfirm}
-          className={isMismatch ? 'password-mismatch' : ''} // 상태값에 따라 클래스 부여
+          className={isMismatch ? 'password-mismatch' : ''}
           onChange={handlePasswordConfirmChange}
         />
 
