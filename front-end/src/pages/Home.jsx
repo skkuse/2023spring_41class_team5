@@ -25,6 +25,12 @@ const Home = () => {
         <li>
           <Link to="/page4">Page4</Link>
         </li>
+        <li>
+          <Link to="/page5">Page5</Link>
+        </li>
+        <li>
+          <Link to="/page6">Page6</Link>
+        </li>
       </ul>
     </div>
   );

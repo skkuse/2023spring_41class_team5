@@ -24,18 +24,29 @@ const Headercodedino = (props) => {
             alt="settings"
           />
         </Link>
-        <Text
-          className="font-pretendard md:ml-[0] ml-[893px] md:mt-0 my-4 text-center text-white_A700"
-          variant="body1"
+        <Link
+          to="page5"
         >
-          {props?.one}
-        </Text>
-        <Text
-          className="font-pretendard md:ml-[0] ml-[37px] mr-[72px] md:mt-0 my-4 text-center text-white_A700"
-          variant="body1"
+          <Text
+            className="font-pretendard md:ml-[0] ml-[893px] md:mt-0 my-4 text-center text-white_A700"
+            variant="body1"
+          >
+            {props?.one}
+          </Text>
+        </Link>
+
+        <Link
+          to="page6"
         >
-          {props?.two}
-        </Text>
+          <Text
+            className="font-pretendard md:ml-[0] ml-[37px] mr-[72px] md:mt-0 my-4 text-center text-white_A700"
+            variant="body1"
+          >
+            {props?.two}
+          </Text>
+        </Link>
+
+
       </header>
     </>
   );
