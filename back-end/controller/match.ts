@@ -2,9 +2,10 @@ import { Request, Response } from 'express'
 import MatchService from '../service/match'
 import HintService from '../service/hint'
 import FeedbackService from '../service/feedback'
+
+import ChatGPTModule from '../module/GPTManager'
 import MatchManager from '../module/MatchManager'
 import SocketManager from '../module/SocketManager'
-
 const getNewMatch = async (req: Request, res: Response) => {
   const uid = req.user
   if (!uid) return
@@ -72,9 +73,18 @@ const getHint = async (req: Request, res: Response) => {
 
   const type = req.body.type
   const code = req.body.code
-  // const hint = ChatGPTModule.requestHint(problem, type, code)
-  const prompt = ''
-  const hint = 'hint result...'
+
+  /*
+const hint = ChatGPTModule.requestHint(problem, type, code)
+type = 0 -> "Find Code Compile Errors"
+type = 1 -> "Find Next Code"
+type = 2 -> "Generate Test Cases"
+*/
+  const { hint, prompt } = await ChatGPTModule.requestHint(
+    problem.description,
+    type,
+    code
+  )
 
   await HintService.createHint(mid, uid, type, prompt, hint)
   SocketManager.emitEvent(mid, 'HINT_UPDATED', {
@@ -93,9 +103,16 @@ const getFeedback = async (req: Request, res: Response) => {
     (match?.status === 1 && match.user1 === uid) ||
     (match?.status === 2 && match.user2 === uid)
   const code = req.body.code
-  // const result = ChatGPTModule.requestFeedback(match.problem, code)
-  let result = 'feedback result...'
-  const prompt = ''
+  /*
+const result = ChatGPTModule.requestFeedback(problem, code, isVictory)
+isVictory = True -> "Please improve this code"
+isVictory = False -> "Please complete the code"
+*/
+  const { result, prompt } = await ChatGPTModule.requestFeedback(
+    match?.problem.description,
+    code,
+    isWin
+  )
 
   await FeedbackService.createFeedback(mid, uid, prompt, result)
   return res.json({ feedback: result })
