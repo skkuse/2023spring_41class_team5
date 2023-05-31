@@ -1,11 +1,18 @@
 import { Button, Img, Text } from "components";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CodeEditor from "@uiw/react-textarea-code-editor";
 import Feedback from "components/Feedback/Feedback";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 const Battle = () => {
   const location = useLocation();
-  console.log(location.state);
+  const navigate = useNavigate();
+  const match = location.state;
+  useEffect(() => {
+    if (match === null) {
+      navigate("/", { replace: true });
+    }
+  }, [match, navigate]);
+
   const [code, setCode] = React.useState(
     `function add(a, b) {\n  return a + b;\n}`
   );
@@ -119,14 +126,14 @@ const Battle = () => {
                 as="h3"
                 variant="h3"
               >
-                Problem
+                Problem {match?.problem.title}
               </Text>
               <Text
                 className="font-pretendard mb-[118px] text-white_A700 w-[96%] sm:w-full"
                 as="h4"
                 variant="h4"
               >
-                problem
+                {match?.problem.description}
               </Text>
             </div>
             <div className="bg-blue_gray_900_01 border border-gray_600 border-solid flex flex-col gap-[35px] items-start justify-center mt-[18px] p-8 sm:px-5 rounded-[5px] w-full">

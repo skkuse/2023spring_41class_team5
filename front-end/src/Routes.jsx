@@ -19,7 +19,7 @@ const ProjectRoutes = () => {
         <Header />
         <Routes>
           <Route path="/" element={<Page />} />
-          <Route path="*" element={<NotFound />} />
+          <Route path="*" element={<Page />} />
           <Route path="/page" element={<Page />} />
           <Route path="/page1" element={<Page1 />} />
           <Route path="/page2" element={<Page2 />} />
