@@ -204,9 +204,9 @@ const isMatchOnProgress = async (mid: number) => {
   const params = [mid]
   const conn = await pool.getConnection()
   const [result] = await conn.query(sql, params)
-  const data = result as { status: number }[]
+  const data = result as { status: string }[]
   conn.release()
-  if (data.length && data[0].status === 0) return true
+  if (data.length && data[0].status === '0') return true
   return false
 }
 

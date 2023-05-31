@@ -54,7 +54,7 @@ const getNewMatch = async (req: Request, res: Response) => {
 const healthCheck = async (req: Request, res: Response) => {
   const uid = req.user
   if (!uid) return
-  const mid = parseInt(req.params.id)
+  const mid = parseInt(req.params.mid)
   if (!mid) return res.status(404).json({ message: 'No Such Matching' })
   MatchManager.healthCheck(mid, uid, () => {
     MatchService.updateMatchStatus(mid, -1)

@@ -8,7 +8,7 @@ const checkCurrentMatch = async (
 ) => {
   const mid = parseInt(req.params.mid)
   if (!mid) return res.status(404).json({ message: 'No Such Matching' })
-  const isOnProgress = MatchService.isMatchOnProgress(mid)
+  const isOnProgress = await MatchService.isMatchOnProgress(mid)
   if (!isOnProgress)
     return res.status(404).json({ message: 'No Such Matching' })
   next()
