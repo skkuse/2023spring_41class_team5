@@ -80,8 +80,11 @@ type = 0 -> "Find Code Compile Errors"
 type = 1 -> "Find Next Code"
 type = 2 -> "Generate Test Cases"
 */
-  const {hint,prompt} = await ChatGPTModule.requestHint(problem.description,type,code)
-
+  const { hint, prompt } = await ChatGPTModule.requestHint(
+    problem.description,
+    type,
+    code
+  )
 
   await HintService.createHint(mid, uid, type, prompt, hint)
   SocketManager.emitEvent(mid, 'HINT_UPDATED', {
@@ -100,16 +103,16 @@ const getFeedback = async (req: Request, res: Response) => {
     (match?.status === 1 && match.user1 === uid) ||
     (match?.status === 2 && match.user2 === uid)
   const code = req.body.code
-/*
+  /*
 const result = ChatGPTModule.requestFeedback(problem, code, isVictory)
 isVictory = True -> "Please improve this code"
 isVictory = False -> "Please complete the code"
 */
-  const problem = await MatchService.getProblemByMatchId(mid)
-  if (!problem) return res.status(404).json({ message: 'No Such Matching' })
-  const {result,prompt} = await ChatGPTModule.requestFeedback(problem.description,code,isWin)
-
-
+  const { result, prompt } = await ChatGPTModule.requestFeedback(
+    match?.problem.description,
+    code,
+    isWin
+  )
 
   await FeedbackService.createFeedback(mid, uid, prompt, result)
   return res.json({ feedback: result })
