@@ -1,7 +1,25 @@
 import React from "react";
 import Routes from "./Routes";
+import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
+import { login } from "store/reducer";
 
 function App() {
+  // const token = localStorage.getItem("token");
+  // const dispatch = useDispatch();
+  // if (token) {
+  //   axios
+  //     .get(`http://localhost:3000/user`, {
+  //       headers: {
+  //         Authorization: `${token}`,
+  //       },
+  //     })
+  //     .then(({ data }) => {
+  //       console.log(data);
+  //       // dispatch(login(data));
+  //     })
+  //     .catch((err) => console.log(err));
+  // }
   return (
     <div className="bg-blue_gray_900 flex flex-col font-pretendard items-center justify-start mx-auto w-full select-none">
       <div className="flex flex-col items-center justify-start w-full">

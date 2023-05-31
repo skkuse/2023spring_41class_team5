@@ -3,7 +3,7 @@ import axios from "axios";
 import { Text } from "components";
 import { useNavigate } from "react-router";
 import LoadingBar from "components/LoadingBar/LoadingBar";
-import io from 'socket.io-client';
+import io from "socket.io-client";
 
 const socket = io("http://localhost:3000"); // replace this with your server address
 
@@ -12,40 +12,22 @@ const Page2 = () => {
   const [match, setMatch] = useState(null);
 
   const getNewMatch = async () => {
-    console.log("getNewMatch started ")
+    console.log("getNewMatch started ");
 
     try {
-      const res = await axios.get('http://localhost:3000/match/new-match', {
+      const res = await axios.get("http://localhost:3000/match/new-match", {
         headers: {
-          Authorization: `${localStorage.getItem('token')}`, // 토큰 값 사용
+          Authorization: `${localStorage.getItem("token")}`, // 토큰 값 사용
         },
       });
-
-      console.log("getNewMatch: ", res.data)
+      console.log("getNewMatch: ", res.data);
       return res.data;
     } catch (error) {
       console.error(error);
     }
   };
 
-  const createAccount = async () => {
-    try {
-      const res = await axios.post('http://localhost:3000/auth/new-user');
-
-      const { token } = res.data;
-      localStorage.setItem('token', token); // 토큰 저장
-      console.log("token: set!", token);
-
-    } catch (error) {
-      console.error(error);
-      console.log("token: not set!", token);
-
-    }
-  };
-
   useEffect(() => {
-    createAccount(); // 계정 생성 요청
-
     const intervalId = setInterval(async () => {
       const newMatch = await getNewMatch();
 
@@ -59,8 +41,8 @@ const Page2 = () => {
 
   useEffect(() => {
     if (match !== null) {
-      socket.emit('join', { roomId: match.id }); // match should have an id property
-      navigate('/battle', { replace: true });
+      socket.emit("join", { roomId: match.id }); // match should have an id property
+      navigate("/battle", { replace: true });
     }
   }, [match, navigate]);
 
