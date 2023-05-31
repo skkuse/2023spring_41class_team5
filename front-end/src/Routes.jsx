@@ -29,7 +29,6 @@ const ProjectRoutes = () => {
           <Route path="/page6" element={<Page6 />} />
           <Route path="/battle" element={<Battle />} />
           <Route path="/home" element={<Home />} />
-
         </Routes>
         <Footer className="bg-gray_900 flex items-center justify-center mt-[111px] md:px-5 w-full" />
       </Router>

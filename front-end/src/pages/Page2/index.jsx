@@ -4,6 +4,7 @@ import { Text } from "components";
 import { useNavigate } from "react-router";
 import LoadingBar from "components/LoadingBar/LoadingBar";
 import io from "socket.io-client";
+import { useDispatch, useSelector } from "react-redux";
 
 const socket = io("http://localhost:3000"); // replace this with your server address
 
@@ -42,7 +43,7 @@ const Page2 = () => {
   useEffect(() => {
     if (match !== null) {
       socket.emit("join", { roomId: match.id }); // match should have an id property
-      navigate("/battle", { replace: true });
+      navigate("/battle", { replace: true, state: { ...match } });
     }
   }, [match, navigate]);
 

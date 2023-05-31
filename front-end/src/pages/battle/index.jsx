@@ -2,7 +2,10 @@ import { Button, Img, Text } from "components";
 import React, { useState } from "react";
 import CodeEditor from "@uiw/react-textarea-code-editor";
 import Feedback from "components/Feedback/Feedback";
+import { useLocation } from "react-router-dom";
 const Battle = () => {
+  const location = useLocation();
+  console.log(location.state);
   const [code, setCode] = React.useState(
     `function add(a, b) {\n  return a + b;\n}`
   );
