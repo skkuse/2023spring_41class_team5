@@ -4,8 +4,10 @@ import { Text } from "components";
 import Banner from "components/Banner";
 import ServiceIntro from "components/Home/ServiceIntro";
 import HistoryTable from "components/Home/Histories/HistoryTable";
+import { useDispatch, useSelector } from "react-redux";
 
 const Page = () => {
+  const user = useSelector((state) => state);
   const menuArr = [
     { name: "서비스 소개", content: <ServiceIntro /> },
     { name: "내 기록 보기", content: <HistoryTable /> },
@@ -16,6 +18,7 @@ const Page = () => {
   const inActiveCSS = "text-gray_500";
   const selectMenuHandler = (index) => {
     setCurrentTab(index);
+    console.log(user);
   };
   return (
     <>

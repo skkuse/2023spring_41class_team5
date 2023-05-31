@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
-import { Input, Button } from 'components';
+import React, { useState } from "react";
+import { Input, Button } from "components";
+import axios from "axios";
 
 function SignupForm() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [passwordConfirm, setPasswordConfirm] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [passwordConfirm, setPasswordConfirm] = useState("");
   const [isMismatch, setMismatch] = useState(false);
 
   const handleEmailChange = (e) => {
@@ -23,12 +24,13 @@ function SignupForm() {
 
   const checkPasswordMatch = (password, passwordConfirm) => {
     setMismatch(password !== passwordConfirm);
-  }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // 회원가입 로직 실행
-    // email, password, passwordConfirm 값 사용
+    axios.post("http://localhost:3000/auth/new-user").then(({ data }) => {
+      alert(`새로 생성된 아이디는 ${data.id} 입니다.`);
+    });
   };
 
   return (
@@ -45,7 +47,7 @@ function SignupForm() {
           label="Password: "
           type="password"
           value={password}
-          className={isMismatch ? 'password-mismatch' : ''}
+          className={isMismatch ? "password-mismatch" : ""}
           onChange={handlePasswordChange}
         />
 
@@ -53,11 +55,17 @@ function SignupForm() {
           label="Confirm Password: "
           type="password"
           value={passwordConfirm}
-          className={isMismatch ? 'password-mismatch' : ''}
+          className={isMismatch ? "password-mismatch" : ""}
           onChange={handlePasswordConfirmChange}
         />
 
-        <Button className='w-full' type="submit" variant="FillBlue70001" shape="RoundedBorder5" size="sm">
+        <Button
+          className="w-full"
+          type="submit"
+          variant="FillBlue70001"
+          shape="RoundedBorder5"
+          size="sm"
+        >
           Sign Up
         </Button>
       </form>
