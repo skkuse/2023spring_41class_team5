@@ -14,7 +14,7 @@ const getNewMatch = async (req: Request, res: Response) => {
   if (match) return res.json({ match }) // -> 해당 대결 리턴
   // 2. 현재 대기열에 적절한 상대가 있는지 확인
   const target = MatchManager.findQueue()
-  if (target && target !== uid) {
+  if (target) {
     // -> 해당 상대와 자신의 대결을 생성 후 리턴
     const mid = await MatchService.createMatch(target, uid, 1) // 문제는 1번으로 고정
     MatchManager.deleteQueue(target)
@@ -39,6 +39,8 @@ const getNewMatch = async (req: Request, res: Response) => {
     )
     const newMatch = await MatchService.getMatchById(mid)
     return res.json({ match: newMatch })
+  } else if (target === uid) {
+    return res.json({ match: null })
   } else {
     // -> 대기열에 추가
     MatchManager.insertQueue(uid)
