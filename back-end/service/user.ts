@@ -20,6 +20,7 @@ const getTokenByUserId = async (uid: number) => {
   const conn = await pool.getConnection()
   const [result] = await conn.query(sql, params)
   const data = result as { auth_token: string }[]
+  conn.release()
   if (data.length) return data[0].auth_token
   return null
 }
@@ -29,6 +30,7 @@ const getUserIdByToken = async (token: string) => {
   const conn = await pool.getConnection()
   const [result] = await conn.query(sql, params)
   const data = result as { id: string }[]
+  conn.release()
   if (data.length) return data[0].id
   return null
 }
@@ -38,6 +40,7 @@ const getUserInfo = async (uid: number) => {
   const conn = await pool.getConnection()
   const [result] = await conn.query(sql, params)
   const data = result as { id: number; name: string; auth_token: string }[]
+  conn.release()
   if (data.length)
     return {
       id: data[0].id,
