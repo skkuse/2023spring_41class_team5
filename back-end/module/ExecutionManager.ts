@@ -47,7 +47,7 @@ class ExecutionManagerClass {
           reject(new Error(stderr))
           return
         }
-        resolve(stdout) //문제없을 경우 stdout을 반환
+        resolve(stdout.trim()) //문제없을 경우 stdout을 반환
       })
     })
   }
