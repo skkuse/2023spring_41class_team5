@@ -1,5 +1,7 @@
 import { List, Text } from "components";
-import React, { useState } from "react";
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+
 const expansion = () => {
   return (
     <div className="flex md:flex-col flex-row gap-[19px] items-center  md:ml-[0] w-[96%] md:w-full">
@@ -29,59 +31,78 @@ const expansion = () => {
     </div>
   );
 };
+
 const HistoryRow = () => {
-  const [open, setOepn] = useState(false);
+  const [historyData, setHistoryData] = useState([]);
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    const fetchHistory = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/match/history', {
+          headers: {
+            Authorization: "3948abcd",
+          },
+        });
+
+        if (response.data) {
+          setHistoryData(response.data.history);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchHistory();
+  }, []);
+
   return (
     <div
       className="bg-blue_gray_900_01 flex flex-col font-pretendard items-center justify-start max-w-[1160px] mt-[10px] mx-auto p-[17px] md:px-5 w-full cursor-pointer"
       onClick={() => {
-        setOepn((prev) => !prev);
+        setOpen((prev) => !prev);
       }}
     >
-      <div className="flex flex-col gap-7 justify-start w-[99%] md:w-full">
-        <div className="flex md:flex-col flex-row md:gap-5 items-center justify-start mr-[33px] w-[98%] md:w-full">
-          <Text className="text-center text-white_A700" variant="body1">
-            1
-          </Text>
-          <Text
-            className="md:ml-[0] ml-[100px] text-center text-white_A700"
-            variant="body1"
-          >
-            고양이 목에 방울 걸기!!!!!!!!!
-          </Text>
-          <Text
-            className="md:ml-[0] ml-[243px] text-center text-white_A700"
-            variant="body1"
-          >
-            2
-          </Text>
-          <Text
-            className="md:ml-[0] ml-[121px] text-center text-white_A700"
-            variant="body1"
-          >
-            100
-          </Text>
-          <Text
-            className="md:ml-[0] ml-[92px] text-center text-white_A700"
-            variant="body1"
-          >
-            -20:22
-          </Text>
-          <Text
-            className="md:ml-[0] ml-[97px] text-center text-white_A700"
-            variant="body1"
-          >
-            승
-          </Text>
-          <Text
-            className="md:ml-[0] ml-[91px] text-center text-white_A700"
-            variant="body1"
-          >
-            23.03.02
-          </Text>
+      {historyData.map((data, index) => (
+        <div key={index} className="flex flex-col gap-7 justify-start w-[99%] md:w-full">
+          <div className="flex md:flex-col flex-row md:gap-5 items-center justify-start mr-[33px] w-[98%] md:w-full">
+            <Text className="text-center text-white_A700" variant="body1">
+              {data.id}
+            </Text>
+            <Text
+              className="md:ml-[0] ml-[100px] text-center text-white_A700"
+              variant="body1"
+            >
+              {data.problem.title}
+            </Text>
+            <Text
+              className="md:ml-[0] ml-[243px] text-center text-white_A700"
+              variant="body1"
+            >
+              {data.status}
+            </Text>
+            <Text
+              className="md:ml-[0] ml-[121px] text-center text-white_A700"
+              variant="body1"
+            >
+              {data.score}
+            </Text>
+            <Text
+              className="md:ml-[0] ml-[92px] text-center text-white_A700"
+              variant="body1"
+            >
+              {data.code}
+            </Text>
+            <Text
+              className="md:ml-[0] ml-[97px] text-center text-white_A700"
+              variant="body1"
+            >
+              {data.feedback}
+            </Text>
+          </div>
+          {open && expansion()}
         </div>
-        {open && expansion()}
-      </div>
+      ))}
     </div>
   );
 };

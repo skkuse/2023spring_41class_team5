@@ -19,7 +19,7 @@ const HistoryTable = () => {
           className="sm:ml-[0] ml-[262px] text-center text-white_A700"
           variant="body1"
         >
-          힌트 사용
+          승패
         </Text>
         <Text
           className="sm:ml-[0] ml-[100px] text-center text-white_A700"
@@ -31,20 +31,15 @@ const HistoryTable = () => {
           className="sm:ml-[0] ml-[100px] text-center text-white_A700"
           variant="body1"
         >
-          시간
+          코드
         </Text>
         <Text
           className="sm:ml-[0] ml-[100px] text-center text-white_A700"
           variant="body1"
         >
-          승패
+          피드백
         </Text>
-        <Text
-          className="sm:ml-[0] ml-[100px] text-center text-white_A700"
-          variant="body1"
-        >
-          날짜
-        </Text>
+
       </div>
       <HistoryRow />
       <HistoryRow />
