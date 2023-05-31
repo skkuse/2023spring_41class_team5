@@ -6,6 +6,8 @@ import FeedbackService from '../service/feedback'
 import ChatGPTModule from '../module/GPTManager'
 import MatchManager from '../module/MatchManager'
 import SocketManager from '../module/SocketManager'
+import ExecutionManager from '../module/ExecutionManager'
+
 const getNewMatch = async (req: Request, res: Response) => {
   const uid = req.user
   if (!uid) return
@@ -128,11 +130,11 @@ const submitCode = async (req: Request, res: Response) => {
   if (!mid) return res.status(404).json({ message: 'No Such Matching' })
   const problem = await MatchService.getProblemByMatchId(mid)
   if (!problem) return res.status(404).json({ message: 'No Such Matching' })
-
+  const ExManager = new ExecutionManager(mid)
   const code = req.body.code as string
   console.log(code)
-  // const score = await ExecutionManager.run(code, problem.testCase)
-  let score = 80
+  const score = await ExManager.run(code, problem.testCase)
+  //let score = 80
   if (score === 100) {
     // TODO: this two trx should be in one trx
     await MatchService.updateMatchStatus(mid, uid)

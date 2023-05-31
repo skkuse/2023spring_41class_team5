@@ -2,7 +2,6 @@ import { Router } from 'express'
 import auth from './auth'
 import match from './match'
 import user from './user'
-
 const router = Router()
 
 router.use('/auth', auth)

@@ -22,17 +22,21 @@ class ExecutionManager {
     };
     
 
-    public run = async(code: string, testcases: string[][])=>{
+    public run = async (code: string, testcases: string[][])=>{
         this.writeStringToFile("code.js",code)
         var i = 0
-        for(i = 0; i <testcases.length;i++){
-            var out = await this.runCode("code.js",testcases[i][0])
-            this.evaluate(out,testcases[i][1])
+        for(i; i<testcases.length;i++){
+        const out = await this.runCode("code.js",testcases[i][0])
+        console.log(out)
+        this.evaluate(out,testcases[i][1])
+        console.log(this.getScore())
         }
         return this.getScore()
     }
+        
+    
 
-    public runCode = async (fileName: string, args: string): Promise<string> => { //js 파일 실행 메소드
+    public runCode = (fileName: string, args: string): Promise<string> => { //js 파일 실행 메소드
         //const formattedArgs = args.map(arg => `"${arg}"`).join(' '); //args format
         const command = `node ${fileName} ${args}`; //명령어
         
@@ -40,7 +44,7 @@ class ExecutionManager {
             const timeout = setTimeout(() => { //10초 이상 실행되면 error를 보냄. 
                 reject(new Error('Execution timed out.'));
             }, 10000);
-          exec(command, (error, stdout, stderr) => {
+           exec(command, (error, stdout, stderr) => {
             clearTimeout(timeout)
             if (error) {
               reject(error);
@@ -55,7 +59,7 @@ class ExecutionManager {
         });
     };
 
-    public evaluate = (userOutput : string, answer : string)=>{//평가 함수
+    public evaluate = async (userOutput : string, answer : string)=>{//평가 함수
         this.evaluate_trial ++
         if(userOutput == answer){
             this.correct++
