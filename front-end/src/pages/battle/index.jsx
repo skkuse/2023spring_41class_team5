@@ -3,19 +3,79 @@ import React, { useEffect, useState } from "react";
 import CodeEditor from "@uiw/react-textarea-code-editor";
 import Feedback from "components/Feedback/Feedback";
 import { useLocation, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { io } from "socket.io-client";
 const Battle = () => {
+  const socket = io("http://localhost:3000", {
+    cors: {
+      origin: "*",
+    },
+  });
+
   const location = useLocation();
   const navigate = useNavigate();
   const match = location.state;
-  useEffect(() => {
-    if (match === null) {
-      navigate("/", { replace: true });
-    }
-  }, [match, navigate]);
-
+  const [submitResult, setSubmitResult] = useState(null);
   const [code, setCode] = React.useState(
     `function add(a, b) {\n  return a + b;\n}`
   );
+
+  const healthCheck = async () => {
+    try {
+      const res = await axios.get(
+        `http://localhost:3000/match/${match.id}/health-check`,
+        {
+          headers: {
+            Authorization: `${localStorage.getItem("token")}`, // 토큰 값 사용
+          },
+        }
+      );
+      return res.data;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    const intervalId = setInterval(async () => {
+      await healthCheck();
+    }, 60000);
+
+    return () => clearInterval(intervalId);
+  }, []);
+
+  useEffect(() => {
+    socket.on("SCORE_UPDATED", (socket) => {
+      console.log(socket);
+    });
+  });
+
+  useEffect(() => {
+    if (match === null) {
+      navigate("/", { replace: true });
+    } else {
+      socket.on("connect", () => {
+        socket.emit("JOIN_ROOM", match.id);
+      });
+      socket.connect();
+    }
+  }, [match, navigate]);
+
+  const onSubmitCode = () => {
+    axios
+      .post(
+        `http://localhost:3000/match/${match.id}/submit`,
+        { code: `${code}` },
+        {
+          headers: {
+            Authorization: `${localStorage.getItem("token")}`, // 토큰 값 사용
+          },
+        }
+      )
+      .then(({ data }) => {
+        setSubmitResult(data.score);
+      });
+  };
   const feedback = `<>
                       알고리즘 부분:                      <br />                      코드의 실행 시간이 상당히 오래 걸렸습니다. 특히 입력
                       크기가 큰 경우에는 성능이 저하될 수 있습니다.
@@ -149,10 +209,7 @@ const Battle = () => {
                 as="h4"
                 variant="h4"
               >
-                <>
-                  입력값 〉&quot;HelloWorld!&quot;기댓값
-                  〉&quot;HelloWorld!&quot;실행 결과 〉Output size differs
-                </>
+                {submitResult !== null ? `${submitResult} 점` : "코드 제출 전!"}
               </Text>
             </div>
           </div>
@@ -190,6 +247,9 @@ const Battle = () => {
                   shape="RoundedBorder5"
                   size="sm"
                   variant="FillTealA70001"
+                  onClick={() => {
+                    console.log(socket);
+                  }}
                 >
                   코드 실행
                 </Button>
@@ -201,8 +261,11 @@ const Battle = () => {
                   size="sm"
                   variant="FillTealA70001"
                   onClick={() => {
-                    setIsGameOver(true);
+                    onSubmitCode();
                   }}
+                  // onClick={() => {
+                  //   setIsGameOver(true);
+                  // }}
                 >
                   제출
                 </Button>

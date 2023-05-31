@@ -3,25 +3,18 @@ import axios from "axios";
 import { Text } from "components";
 import { useNavigate } from "react-router";
 import LoadingBar from "components/LoadingBar/LoadingBar";
-import io from "socket.io-client";
-import { useDispatch, useSelector } from "react-redux";
-
-const socket = io("http://localhost:3000"); // replace this with your server address
 
 const Page2 = () => {
   const navigate = useNavigate();
   const [match, setMatch] = useState(null);
 
   const getNewMatch = async () => {
-    console.log("getNewMatch started ");
-
     try {
       const res = await axios.get("http://localhost:3000/match/new-match", {
         headers: {
           Authorization: `${localStorage.getItem("token")}`, // 토큰 값 사용
         },
       });
-      console.log("getNewMatch: ", res.data);
       return res.data;
     } catch (error) {
       console.error(error);
@@ -42,7 +35,6 @@ const Page2 = () => {
 
   useEffect(() => {
     if (match !== null) {
-      socket.emit("join", { roomId: match.id }); // match should have an id property
       navigate("/battle", { replace: true, state: { ...match } });
     }
   }, [match, navigate]);
