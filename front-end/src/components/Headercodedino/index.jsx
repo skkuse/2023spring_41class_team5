@@ -1,13 +1,14 @@
 import React from "react";
 
 import { Img, Text } from "components";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "store/reducer";
 
 const Headercodedino = (props) => {
   const userName = useSelector((state) => state.user.name);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const userNameBox = (
     <>
       <Text
@@ -21,6 +22,7 @@ const Headercodedino = (props) => {
         variant="body1"
         onClick={() => {
           dispatch(logout());
+          navigate("/", { replace: true });
         }}
       >
         로그아웃
