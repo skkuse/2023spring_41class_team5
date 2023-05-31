@@ -11,20 +11,22 @@ const Expansion = ({ history }) => {
         orientation="horizontal"
       >
         <div className="bg-gray_900 flex flex-col items-start justify-start sm:ml-[0] p-4 rounded-[5px] w-full">
+          <Text className=" text-2xl text-orange-100 place-self-center">코드</Text>
           <Text className="mb-[358px] mt-[3px] text-white_A700" variant="body1">
             {code}
           </Text>
         </div>
         <div className="bg-gray_900 flex flex-col items-start justify-start sm:ml-[0] p-[19px] rounded-[5px] w-full">
+          <Text className=" text-2xl text-orange-100 place-self-center">피드백</Text>
           <Text className="mb-[355px] text-white_A700" variant="body1">
             {feedback}
           </Text>
         </div>
         <div className="bg-gray_900 flex flex-col items-start justify-start p-[19px] rounded-[5px] ">
+          <Text className=" text-2xl text-orange-100 place-self-center">결과</Text>
           <Text
             className="mb-[355px] ml-1 md:ml-[0] text-white_A700"
-            variant="body1"
-          >
+            variant="body1">
             {status}
           </Text>
         </div>
