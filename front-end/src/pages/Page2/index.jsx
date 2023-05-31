@@ -5,6 +5,7 @@ import { useNavigate } from "react-router";
 import LoadingBar from "components/LoadingBar/LoadingBar";
 
 const Page2 = () => {
+  const isLoggedIn = localStorage.getItem("token");
   const navigate = useNavigate();
   const [match, setMatch] = useState(null);
 
@@ -20,6 +21,12 @@ const Page2 = () => {
       console.error(error);
     }
   };
+
+  useEffect(() => {
+    if (!isLoggedIn) {
+      navigate("/", { replace: true });
+    }
+  }, [isLoggedIn]);
 
   useEffect(() => {
     const intervalId = setInterval(async () => {
