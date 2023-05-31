@@ -8,12 +8,14 @@ class ExecutionManagerClass {
     private output : string // stdout
     private evaluate_trial : number //채점을 진행한 횟수
     private correct : number //맞은 횟수
+    private jsId : number
 
     constructor(){ // 생성자
         this.id = 0
         this.output = ''
         this.evaluate_trial = 0
         this.correct = 0
+        this.jsId = 0
     }
 
     public writeStringToFile = (fileName: string, code: string) => { //code를 fileName이라는 파일에 작성
@@ -23,13 +25,13 @@ class ExecutionManagerClass {
     
 
     public run = async (code: string, testcases: string[][])=>{
-        this.writeStringToFile("code.js",code)
+        var fileName = 'public/'+ this.jsId.toString() + ".js"
+        this.jsId ++
+        this.writeStringToFile(fileName,code)
         var i = 0
         for(i; i<testcases.length;i++){
-        const out = await this.runCode("code.js",testcases[i][0])
-        //console.log(out)
-        this.evaluate(out,testcases[i][1])
-        //console.log(this.getScore())
+            const out = await this.runCode(fileName,testcases[i][0])
+            this.evaluate(out,testcases[i][1])
         }
         return this.getScore()
     }
