@@ -1,6 +1,9 @@
 import { List, Text } from "components";
 import React, { useState } from "react";
-const expansion = () => {
+
+const Expansion = ({ history }) => {
+  const { status, feedback, code } = history;
+
   return (
     <div className="flex md:flex-col flex-row gap-[19px] items-center  md:ml-[0] w-[96%] md:w-full">
       <List
@@ -9,12 +12,12 @@ const expansion = () => {
       >
         <div className="bg-gray_900 flex flex-col items-start justify-start sm:ml-[0] p-4 rounded-[5px] w-full">
           <Text className="mb-[358px] mt-[3px] text-white_A700" variant="body1">
-            내 코드
+            {code}
           </Text>
         </div>
         <div className="bg-gray_900 flex flex-col items-start justify-start sm:ml-[0] p-[19px] rounded-[5px] w-full">
           <Text className="mb-[355px] text-white_A700" variant="body1">
-            피드백
+            {feedback}
           </Text>
         </div>
         <div className="bg-gray_900 flex flex-col items-start justify-start p-[19px] rounded-[5px] ">
@@ -22,65 +25,63 @@ const expansion = () => {
             className="mb-[355px] ml-1 md:ml-[0] text-white_A700"
             variant="body1"
           >
-            힌트 내용
+            {status}
           </Text>
         </div>
       </List>
     </div>
   );
 };
-const HistoryRow = () => {
-  const [open, setOepn] = useState(false);
+
+const HistoryRow = ({ history, number }) => {
+  const { problem, status, feedback, score, code } = history;
+  const num = number;
+
+  const [open, setOpen] = useState(false);
   return (
     <div
       className="bg-blue_gray_900_01 flex flex-col font-pretendard items-center justify-start max-w-[1160px] mt-[10px] mx-auto p-[17px] md:px-5 w-full cursor-pointer"
       onClick={() => {
-        setOepn((prev) => !prev);
+        setOpen((prev) => !prev);
       }}
     >
       <div className="flex flex-col gap-7 justify-start w-[99%] md:w-full">
         <div className="flex md:flex-col flex-row md:gap-5 items-center justify-start mr-[33px] w-[98%] md:w-full">
           <Text className="text-center text-white_A700" variant="body1">
-            1
+            {num}
           </Text>
           <Text
             className="md:ml-[0] ml-[100px] text-center text-white_A700"
             variant="body1"
           >
-            고양이 목에 방울 걸기!!!!!!!!!
+            {problem.title}
           </Text>
           <Text
             className="md:ml-[0] ml-[243px] text-center text-white_A700"
             variant="body1"
           >
-            2
+            {status}
           </Text>
           <Text
             className="md:ml-[0] ml-[121px] text-center text-white_A700"
             variant="body1"
           >
-            100
+            {score}
           </Text>
           <Text
             className="md:ml-[0] ml-[92px] text-center text-white_A700"
             variant="body1"
           >
-            -20:22
+            {code}
           </Text>
           <Text
             className="md:ml-[0] ml-[97px] text-center text-white_A700"
             variant="body1"
           >
-            승
-          </Text>
-          <Text
-            className="md:ml-[0] ml-[91px] text-center text-white_A700"
-            variant="body1"
-          >
-            23.03.02
+            {feedback}
           </Text>
         </div>
-        {open && expansion()}
+        {open && <Expansion history={history} />}
       </div>
     </div>
   );
