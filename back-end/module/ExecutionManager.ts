@@ -2,20 +2,11 @@ import { readFileSync, writeFileSync } from 'fs';
 import { execSync } from 'child_process';
 import fs from 'fs';
 import { exec } from 'child_process'
+import { getRandomString } from '../util/random';
 
 class ExecutionManagerClass {
-    private id //문제 번호
-    private output : string // stdout
-    private evaluate_trial : number //채점을 진행한 횟수
-    private correct : number //맞은 횟수
-    private jsId : number
 
     constructor(){ // 생성자
-        this.id = 0
-        this.output = ''
-        this.evaluate_trial = 0
-        this.correct = 0
-        this.jsId = 0
     }
 
     public writeStringToFile = (fileName: string, code: string) => { //code를 fileName이라는 파일에 작성
@@ -25,15 +16,21 @@ class ExecutionManagerClass {
     
 
     public run = async (code: string, testcases: string[][])=>{
-        var fileName = 'public/'+ this.jsId.toString() + ".js"
-        this.jsId ++
+        var fileName = 'public/'+ getRandomString() + ".js"
+        var execution_trial = 0
+        var success = 0
         this.writeStringToFile(fileName,code)
         var i = 0
         for(i; i<testcases.length;i++){
+            execution_trial++
             const out = await this.runCode(fileName,testcases[i][0])
-            this.evaluate(out,testcases[i][1])
+            var correct_check = await this.evaluate(out,testcases[i][1])
+            if(correct_check == 1){
+                success ++
+            }
+            
         }
-        return this.getScore()
+        return ((success*100) / execution_trial) 
     }
         
     
@@ -62,9 +59,7 @@ class ExecutionManagerClass {
     };
 
     public evaluate = async (userOutput : string, answer : string)=>{//평가 함수
-        this.evaluate_trial ++
         if(userOutput == answer){
-            this.correct++
             return 1
         }
         else{ 
@@ -72,9 +67,9 @@ class ExecutionManagerClass {
         }
     }
 
-    public getScore = () =>{
-        return ((this.correct*100) / this.evaluate_trial)
-    }
+    //public getScore = () =>{
+    //    return ((this.correct*100) / this.evaluate_trial)
+    //}
 }
 
 const ExecutionManager = new ExecutionManagerClass()
