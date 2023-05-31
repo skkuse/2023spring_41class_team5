@@ -3,14 +3,14 @@ import { execSync } from 'child_process';
 import fs from 'fs';
 import { exec } from 'child_process'
 
-class ExecutionManager {
-    private id = 0 //문제 번호
+class ExecutionManagerClass {
+    private id //문제 번호
     private output : string // stdout
     private evaluate_trial : number //채점을 진행한 횟수
     private correct : number //맞은 횟수
 
-    constructor(id : number){ // 생성자
-        this.id = id
+    constructor(){ // 생성자
+        this.id = 0
         this.output = ''
         this.evaluate_trial = 0
         this.correct = 0
@@ -27,9 +27,9 @@ class ExecutionManager {
         var i = 0
         for(i; i<testcases.length;i++){
         const out = await this.runCode("code.js",testcases[i][0])
-        console.log(out)
+        //console.log(out)
         this.evaluate(out,testcases[i][1])
-        console.log(this.getScore())
+        //console.log(this.getScore())
         }
         return this.getScore()
     }
@@ -74,5 +74,7 @@ class ExecutionManager {
         return ((this.correct*100) / this.evaluate_trial)
     }
 }
+
+const ExecutionManager = new ExecutionManagerClass()
 
 export default ExecutionManager

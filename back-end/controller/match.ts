@@ -130,10 +130,9 @@ const submitCode = async (req: Request, res: Response) => {
   if (!mid) return res.status(404).json({ message: 'No Such Matching' })
   const problem = await MatchService.getProblemByMatchId(mid)
   if (!problem) return res.status(404).json({ message: 'No Such Matching' })
-  const ExManager = new ExecutionManager(mid)
   const code = req.body.code as string
   console.log(code)
-  const score = await ExManager.run(code, problem.testCase)
+  const score = await ExecutionManager.run(code, problem.testCase)
   //let score = 80
   if (score === 100) {
     // TODO: this two trx should be in one trx
