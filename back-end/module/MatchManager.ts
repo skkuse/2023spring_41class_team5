@@ -18,21 +18,21 @@ class MatchManagerClass {
     if (!this.queue.length) return null
     else return this.queue[0].id
   }
-  insertQueue(id: number) {
+  updateTimer(id: number) {
     const target = this.queue.find((i) => i.id === id)
-    if (target) {
-      clearTimeout(target.timer)
-      target.timer = setTimeout(() => {
+    if (!target) return
+    clearTimeout(target.timer)
+    target.timer = setTimeout(() => {
+      this.deleteQueue(id)
+    }, QUEUE_TIMEOUT)
+  }
+  insertQueue(id: number) {
+    this.queue.push({
+      id: id,
+      timer: setTimeout(() => {
         this.deleteQueue(id)
-      }, QUEUE_TIMEOUT)
-    } else {
-      this.queue.push({
-        id: id,
-        timer: setTimeout(() => {
-          this.deleteQueue(id)
-        }, QUEUE_TIMEOUT),
-      })
-    }
+      }, QUEUE_TIMEOUT),
+    })
   }
   deleteQueue(id: number) {
     const idx = this.queue.findIndex((i) => i.id === id)

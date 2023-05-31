@@ -39,6 +39,10 @@ const getNewMatch = async (req: Request, res: Response) => {
     )
     const newMatch = await MatchService.getMatchById(mid)
     return res.json({ match: newMatch })
+  } else if (target === uid) {
+    // -> timer update
+    MatchManager.updateTimer(target)
+    return res.json({ match: null })
   } else {
     // -> 대기열에 추가
     MatchManager.insertQueue(uid)
