@@ -26,7 +26,7 @@ class ChatGPTManager {
       ],
       temperature: 1,
     })
-    const hint = completion.data.choices[0].message?.content.trim()
+    const hint = completion.data.choices[0].message?.content.trim() || ''
     const prompt = comment
     return { hint, prompt }
   }
@@ -49,7 +49,7 @@ class ChatGPTManager {
       ],
       temperature: 1,
     })
-    const result = completion.data.choices[0].message?.content.trim()
+    const result = completion.data.choices[0].message?.content.trim() || ''
     const prompt = comment
     return { result, prompt }
   }
