@@ -31,7 +31,8 @@ function LoginForm() {
           Authorization: `${token}`,
         },
       });
-      dispatch(login(user));
+      // localStorage.setItem("user", JSON.stringify(user.data));
+      dispatch(login(user.data));
       navigate("/", { replace: true });
     } catch (error) {
       console.error(error);
