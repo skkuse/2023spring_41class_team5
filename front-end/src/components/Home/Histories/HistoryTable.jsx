@@ -2,7 +2,7 @@ import React from "react";
 import HistoryRow from "./HistoryRow";
 import { Text } from "components";
 
-const HistoryTable = () => {
+const HistoryTable = ({ historyData }) => {
   return (
     <>
       <div className="flex sm:flex-col flex-row font-pretendard sm:gap-5 items-center justify-start max-w-[1072px] mt-[43px] mx-auto md:px-5 w-full">
@@ -41,9 +41,9 @@ const HistoryTable = () => {
         </Text>
 
       </div>
-      <HistoryRow />
-      <HistoryRow />
-      <HistoryRow />
+      {historyData.map((history, index) => (
+        <HistoryRow key={index} history={history} number={index} />
+      ))}
     </>
   );
 };

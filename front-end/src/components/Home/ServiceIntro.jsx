@@ -64,7 +64,11 @@ const ServiceIntro = () => {
         orientation="vertical"
       >
         <div className="flex flex-1 md:flex-col flex-row md:gap-10 items-center justify-between w-full">
-          <div className="bg-blue_gray_100 h-[267px] w-[53%]"></div>
+          <Img
+            src="images/1.png"
+            className="h-[267px] w-[53%] mr-10"
+            alt="settings_Five"
+          />
           <div className="flex flex-col items-start justify-start">
             <Text
               className="font-dnfbitbitotf text-teal_A700"
@@ -94,8 +98,11 @@ const ServiceIntro = () => {
         </div>
         <Line className="self-center h-[3px] bg-white_A700 w-[9%]" />
         <div className="flex md:flex-1 md:flex-col flex-row md:gap-10 gap-20 items-center justify-start w-[92%] md:w-full">
-          <div className="bg-blue_gray_100 h-[267px] w-[58%]"></div>
-          <div className="flex flex-col items-start justify-start">
+          <Img
+            src="images/2.png"
+            className="h-[267px] w-[53%]"
+            alt="settings_Five"
+          />          <div className="flex flex-col items-start justify-start">
             <Text
               className="font-dnfbitbitotf text-teal_A700"
               as="h3"
@@ -124,7 +131,11 @@ const ServiceIntro = () => {
         </div>
         <Line className="self-center h-[3px] bg-white_A700 w-[9%]" />
         <div className="flex md:flex-1 md:flex-col flex-row md:gap-10 items-center justify-between w-[98%] md:w-full">
-          <div className="bg-blue_gray_100 h-[267px] w-[54%]"></div>
+          <Img
+            src="images/3.png"
+            className="h-[267px] w-[53%] mr-15"
+            alt="settings_Five"
+          />
           <div className="flex flex-col items-start justify-start">
             <Text
               className="font-dnfbitbitotf text-teal_A700"
