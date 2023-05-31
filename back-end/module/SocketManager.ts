@@ -6,7 +6,7 @@ class SocketManagerClass {
     this.socket = null
   }
   init(server: any) {
-    this.socket = new Server(server, {})
+    this.socket = new Server(server, { cors: { origin: '*' } })
     this.socket.on('connection', (socket) => {
       socket.on('JOIN_ROOM', (id) => {
         socket.join(id)
