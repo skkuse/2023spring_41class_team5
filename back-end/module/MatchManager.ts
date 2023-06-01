@@ -1,5 +1,6 @@
 const QUEUE_TIMEOUT = 3 * 1000
 const HEALTH_CHECK_TIMEOUT = 3 * 60 * 1000
+const MATCH_TIMEOUT = 30 * 60 * 1000
 
 class MatchManagerClass {
   private queue: { id: number; timer: NodeJS.Timer }[]
@@ -9,6 +10,7 @@ class MatchManagerClass {
     uid2: number
     timer1: NodeJS.Timer
     timer2: NodeJS.Timer
+    endTimer: NodeJS.Timer
   }[]
   constructor() {
     this.queue = []
@@ -45,7 +47,8 @@ class MatchManagerClass {
     uid1: number,
     uid2: number,
     callback1: () => void,
-    callback2: () => void
+    callback2: () => void,
+    endCallback: () => void
   ) {
     this.match.push({
       id,
@@ -59,6 +62,10 @@ class MatchManagerClass {
         callback2()
         this.deleteMatch(id)
       }, HEALTH_CHECK_TIMEOUT),
+      endTimer: setTimeout(() => {
+        endCallback()
+        this.deleteMatch(id)
+      }, MATCH_TIMEOUT),
     })
   }
   deleteMatch(id: number) {
