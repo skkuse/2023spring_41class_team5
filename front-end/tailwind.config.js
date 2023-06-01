@@ -33,7 +33,10 @@ module.exports = {
         white_A700: "#ffffff",
         gray_700_01: "#606060",
       },
-      fontFamily: { dnfbitbitotf: "DNF Bit Bit OTF", pretendard: "Pretendard" },
+      fontFamily: {
+        dnfbitbitotf: ['DNFBitBit', 'sans-serif'],
+        pretendard: ['Pretendard', 'sans-serif'],
+      }
     },
   },
   plugins: [require("@tailwindcss/forms")],

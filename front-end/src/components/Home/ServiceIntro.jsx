@@ -7,7 +7,7 @@ const ServiceIntro = () => {
       <div className="flex md:flex-col flex-row md:gap-5 items-end justify-start max-w-[1017px] mt-[108px] mx-auto md:px-5 w-full">
         <div className="flex flex-col items-start justify-start mb-[3px]">
           <Text
-            className="font-dnfbitbitotf text-teal_A700"
+            className="font- text-teal_A700"
             as="h3"
             variant="h3"
           >

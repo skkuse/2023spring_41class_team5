@@ -1,0 +1,13 @@
+@font-face {
+    font-family: 'DNFBitBit';
+    src: url('font/DNFBitBit.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Pretendard';
+    src: url('font/Pretendard.otf') format('opentype');
+}
+
+body {
+    font-family: 'DNFBitBit', sans-serif;
+}
