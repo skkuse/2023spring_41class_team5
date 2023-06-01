@@ -3,11 +3,12 @@ import React, { useState } from "react";
 import CodeEditor from "@uiw/react-textarea-code-editor";
 import Result from "./Result";
 import { useNavigate } from "react-router";
-const Feedback = ({ code, feedback }) => {
+const Feedback = ({ code, feedback, isWin }) => {
   const [isClicked, setIsClicked] = useState(false);
   const navigate = useNavigate();
   return !isClicked ? (
     <Result
+      isWin={isWin}
       onClickFeedback={() => {
         setIsClicked(true);
       }}

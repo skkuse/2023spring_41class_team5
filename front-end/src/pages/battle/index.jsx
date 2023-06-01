@@ -26,9 +26,11 @@ const Battle = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const match = location.state;
+
   const [submitResult, setSubmitResult] = useState(null);
-  const [opponentScore, setOpponentScore] = useState(-100);
+  const [opponentScore, setOpponentScore] = useState(0);
   const [isGameOver, setIsGameOver] = useState(false);
+  const [isWin, setIsWin] = useState(null);
 
   const [code, setCode] = React.useState(
     `function add(a, b) {\n  return a + b;\n}`
@@ -42,7 +44,6 @@ const Battle = () => {
 
   const healthCheck = async () => {
     try {
-      console.log("health checking...");
       const res = await axios.get(
         `${API_BASE_URL}/match/${match.id}/health-check`,
         {
@@ -56,9 +57,10 @@ const Battle = () => {
       console.error(error);
     }
   };
-
+  console.log("heello");
   useEffect(() => {
     const intervalId = setInterval(() => {
+      if (isGameOver) return;
       setRemainingTime((time) => time - 1);
     }, 1000);
 
@@ -67,6 +69,7 @@ const Battle = () => {
 
   useEffect(() => {
     const intervalId = setInterval(async () => {
+      if (isGameOver) return;
       await healthCheck();
     }, 60000);
 
@@ -81,9 +84,10 @@ const Battle = () => {
       setOpponentScore(score);
     });
     socket.on("MATCH_ENDED", (socket) => {
+      const { win: winUser } = socket;
+      getFeedback();
+      setIsWin(winUser === user.id);
       setIsGameOver(true);
-      console.log(socket);
-      socket.disconnect();
     });
   }, [socket]);
 
@@ -91,7 +95,6 @@ const Battle = () => {
     if (match === null) {
       navigate("/", { replace: true });
     } else {
-      console.log(match);
       if (socket === null) return;
       socket.on("connect", () => {
         socket.emit("JOIN_ROOM", match.id);
@@ -115,7 +118,8 @@ const Battle = () => {
         setSubmitResult(data.score);
       });
   };
-  const feedback = `<>
+
+  const [feedback, setFeedback] = useState(`<>
                       알고리즘 부분:                      <br />                      코드의 실행 시간이 상당히 오래 걸렸습니다. 특히 입력
                       크기가 큰 경우에는 성능이 저하될 수 있습니다.
                       <br />
@@ -130,9 +134,26 @@ const Battle = () => {
                       코드가 길고 복잡해 보입니다. 불필요한 중첩이나 복잡한
                       조건문을 줄이고, 코드를 간결하게 리팩토링하는 것이
                       좋습니다.
-                    </>`;
+                    </>`);
+  const getFeedback = () => {
+    console.log("getFeedback start");
+    axios
+      .post(
+        `${API_BASE_URL}/match/${match.id}/feedback`,
+        { code: `${code}` },
+        {
+          headers: {
+            Authorization: `${localStorage.getItem("token")}`, // 토큰 값 사용
+          },
+        }
+      )
+      .then(({ data }) => {
+        console.log("getFeedback end");
+        setFeedback(data.feedback);
+      });
+  };
   return isGameOver ? (
-    <Feedback code={code} feedback={feedback} />
+    <Feedback code={code} feedback={feedback} isWin={isWin} />
   ) : (
     <>
       <div className="flex flex-col items-start justify-start max-w-[1156px] mx-auto md:px-5 w-full mt-5">
@@ -287,9 +308,6 @@ const Battle = () => {
                   shape="RoundedBorder5"
                   size="sm"
                   variant="FillTealA70001"
-                  onClick={() => {
-                    console.log(socket);
-                  }}
                 >
                   코드 실행
                 </Button>
