@@ -60,16 +60,16 @@ const ServiceIntro = () => {
         />
       </div>
       <List
-        className="flex-col gap-[18.5px] grid items-center max-w-[975px] mt-[84px] mx-auto md:px-5 w-full"
+        className="flex-col gap-[18.5px] grid items-center max-w-[1080px] mt-[84px] mx-auto md:px-5 w-full"
         orientation="vertical"
       >
-        <div className="flex flex-1 md:flex-col flex-row md:gap-10 items-center justify-between w-full">
+        <div className="flex flex-1 md:flex-col flex-row md:gap-10 items-center w-full">
           <Img
             src="images/1.png"
-            className="h-[267px] w-[53%] mr-10"
+            className="h-[267px] w-[53%] "
             alt="settings_Five"
           />
-          <div className="flex flex-col items-start justify-start">
+          <div className=" ml-20 flex flex-col items-start justify-start">
             <Text
               className="font-dnfbitbitotf text-teal_A700"
               as="h3"
@@ -84,7 +84,7 @@ const ServiceIntro = () => {
             >
               <>
                 지역 기반 매칭, <br />
-                이웃과 함께 즐길 수 있어요
+                이웃과<br /> 함께 즐길 수 있어요
               </>
             </Text>
             <Text
@@ -97,12 +97,13 @@ const ServiceIntro = () => {
           </div>
         </div>
         <Line className="self-center h-[3px] bg-white_A700 w-[9%]" />
-        <div className="flex md:flex-1 md:flex-col flex-row md:gap-10 gap-20 items-center justify-start w-[92%] md:w-full">
+        <div className="flex flex-1 md:flex-col flex-row md:gap-10 items-center w-full">
           <Img
             src="images/2.png"
-            className="h-[267px] w-[53%]"
+            className="h-[267px] w-[53%] "
             alt="settings_Five"
-          />          <div className="flex flex-col items-start justify-start">
+          />
+          <div className="ml-20 flex flex-col items-start justify-start">
             <Text
               className="font-dnfbitbitotf text-teal_A700"
               as="h3"
@@ -111,7 +112,7 @@ const ServiceIntro = () => {
               대결
             </Text>
             <Text
-              className="font-dnfbitbitotf mt-3 text-white_A700"
+              className="font-dnfbitbitotf mt-3 text-white_A700 "
               as="h2"
               variant="h2"
             >
@@ -130,13 +131,13 @@ const ServiceIntro = () => {
           </div>
         </div>
         <Line className="self-center h-[3px] bg-white_A700 w-[9%]" />
-        <div className="flex md:flex-1 md:flex-col flex-row md:gap-10 items-center justify-between w-[98%] md:w-full">
+        <div className="flex flex-1 md:flex-col flex-row md:gap-10 items-center w-full">
           <Img
             src="images/3.png"
-            className="h-[267px] w-[53%] mr-15"
+            className="h-[267px] w-[53%]"
             alt="settings_Five"
           />
-          <div className="flex flex-col items-start justify-start">
+          <div className="ml-20 flex flex-col items-start justify-start">
             <Text
               className="font-dnfbitbitotf text-teal_A700"
               as="h3"
@@ -150,7 +151,7 @@ const ServiceIntro = () => {
               variant="h2"
             >
               <>
-                내 코드를 더욱 정밀하게! <br />
+                내 코드를 더욱 정밀하게!<br />
                 AI로 분석하는 피드백
               </>
             </Text>
