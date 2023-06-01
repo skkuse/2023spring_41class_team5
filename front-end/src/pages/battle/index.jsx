@@ -21,6 +21,8 @@ const Battle = () => {
   const match = location.state;
   const [submitResult, setSubmitResult] = useState(null);
   const [opponentScore, setOpponentScore] = useState(0);
+  const [isGameOver, setIsGameOver] = useState(false);
+
   const [code, setCode] = React.useState(
     `function add(a, b) {\n  return a + b;\n}`
   );
@@ -48,16 +50,15 @@ const Battle = () => {
     }
   };
 
-  const timeCounter = () => {
-    const intervalId = setInterval(() => {
-      setRemainingTime((time) => time - 1);
-    }, 1000);
-    return () => clearInterval(intervalId);
-  };
+  // console.log("hello");
 
-  useEffect(() => {
-    timeCounter();
-  }, []);
+  // useEffect(() => {
+  //   const intervalId = setInterval(() => {
+  //     setRemainingTime((time) => time - 1);
+  //   }, 1000);
+
+  //   return () => clearInterval(intervalId);
+  // }, []);
 
   useEffect(() => {
     const intervalId = setInterval(async () => {
@@ -72,9 +73,9 @@ const Battle = () => {
       const { uid: updatedId, score } = socket;
       if (user.id === updatedId) return;
       setOpponentScore(score);
-      console.log(socket, user.id, updatedId);
     });
     socket.on("MATCH_ENDED", (socket) => {
+      setIsGameOver(true);
       console.log(socket);
     });
   });
@@ -122,7 +123,6 @@ const Battle = () => {
                       조건문을 줄이고, 코드를 간결하게 리팩토링하는 것이
                       좋습니다.
                     </>`;
-  const [isGameOver, setIsGameOver] = useState(false);
   return isGameOver ? (
     <Feedback code={code} feedback={feedback} />
   ) : (
