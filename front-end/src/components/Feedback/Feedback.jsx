@@ -34,7 +34,7 @@ const Feedback = ({ code, feedback, isWin }) => {
               </div>
             </div>
           </div>
-          <div className="absolute bg-gray_900 flex flex-col inset-x-[0] items-center justify-end mx-auto outline outline-[0.5px] outline-gray_700 p-[15px] rounded-[5px] top-[11%] w-[67%]">
+          <div className="absolute bg-gray_900 flex flex-col inset-x-[0] items-center justify-end mx-auto outline outline-[0.5px] outline-gray_700 p-[15px] rounded-[5px] top-[11%] w-full">
             <div className="flex flex-col gap-[11px] items-center justify-start mt-[5px] w-[99%] md:w-full">
               <div className="flex md:flex-col gap-5  w-full">
                 <div className="basis-3/6 bg-blue_gray_900_01 flex flex-col gap-[15px] items-start outline outline-[0.5px] outline-blue_gray_900 p-[15px] rounded-[5px]">
@@ -70,8 +70,6 @@ const Feedback = ({ code, feedback, isWin }) => {
                   </Text>
                   <MDEditor.Markdown
                     className="bg-neutral-800 p-4 font-pretendard mb-[67px] ml-1.5 md:ml-[0] text-white_A700"
-                    as="h4"
-                    variant="h4"
                     source={feedback}
                   />
                 </div>
