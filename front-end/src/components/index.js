@@ -7,3 +7,4 @@ export { Text } from "./Text";
 export { Input } from "./Input";
 export { SignupForm } from "./SignupForm";
 export { LoginForm } from "./LoginForm";
+export { HintModal } from "./HintModal";
