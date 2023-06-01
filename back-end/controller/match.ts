@@ -37,6 +37,13 @@ const getNewMatch = async (req: Request, res: Response) => {
           win: null,
           disconnected: uid,
         })
+      },
+      () => {
+        MatchService.updateMatchStatus(mid, -1)
+        SocketManager.emitEvent(mid, 'MATCH_ENDED', {
+          win: null,
+          disconnected: null,
+        })
       }
     )
     const newMatch = await MatchService.getMatchById(mid)
