@@ -1,4 +1,4 @@
-import { Button, Img, Text } from "components";
+import { Button, HintModal, Img, Text } from "components";
 import React, { useEffect, useState } from "react";
 import CodeEditor from "@uiw/react-textarea-code-editor";
 import Feedback from "components/Feedback/Feedback";
@@ -7,9 +7,11 @@ import axios from "axios";
 import { io } from "socket.io-client";
 import { useSelector } from "react-redux";
 import { API_BASE_URL } from "api";
+import { useModal } from "components/HintModal/useModal";
 const Battle = () => {
   const user = useSelector((state) => state.user);
   const [socket, setSocket] = useState(null);
+  const hintModal = useModal();
 
   useEffect(() => {
     const socket = io(`${API_BASE_URL}`, {
@@ -62,7 +64,6 @@ const Battle = () => {
   useEffect(() => {
     const intervalId = setInterval(() => {
       if (isWin !== null) return;
-      console.log("timer");
       setRemainingTime((time) => time - 1);
     }, 1000);
     setTimer(intervalId);
@@ -124,7 +125,6 @@ const Battle = () => {
 
   const [feedback, setFeedback] = useState("");
   const getFeedback = () => {
-    console.log("getFeedback start");
     axios
       .post(
         `${API_BASE_URL}/match/${match.id}/feedback`,
@@ -136,8 +136,27 @@ const Battle = () => {
         }
       )
       .then(({ data }) => {
-        console.log("getFeedback end");
         setFeedback(data.feedback);
+      });
+  };
+  const [hint, setHint] = useState("로딩중..");
+  const onClickHint = (type) => {
+    hintModal.openModal(hint);
+    axios
+      .post(
+        `${API_BASE_URL}/match/${match.id}/hint`,
+        { code: `${code}`, type: type },
+        {
+          headers: {
+            Authorization: `${localStorage.getItem("token")}`, // 토큰 값 사용
+          },
+        }
+      )
+      .then(({ data }) => {
+        setHint(data.hint);
+      })
+      .catch(() => {
+        setHint("서버 에러");
       });
   };
   return isGameOver ? (
@@ -202,24 +221,27 @@ const Battle = () => {
                       shape="RoundedBorder5"
                       size="sm"
                       variant="FillTealA70001"
+                      onClick={() => onClickHint(0)}
                     >
-                      질문
+                      에러 찾기
                     </Button>
                     <Button
                       className="bg-blue-700 cursor-pointer font-normal leading-[normal] min-w-[151px] text-center text-white_A700 text-l"
                       shape="RoundedBorder5"
                       size="sm"
                       variant="FillTealA70001"
-                    >
-                      먹물 30초
-                    </Button>
-                    <Button
-                      className="bg-blue-700 cursor-pointer font-normal leading-[normal] min-w-[151px] text-center text-white_A700 text-l"
-                      shape="RoundedBorder5"
-                      size="sm"
-                      variant="FillTealA70001"
+                      onClick={() => onClickHint(1)}
                     >
                       다음 줄 작성
+                    </Button>
+                    <Button
+                      className="bg-blue-700 cursor-pointer font-normal leading-[normal] min-w-[151px] text-center text-white_A700 text-l"
+                      shape="RoundedBorder5"
+                      size="sm"
+                      variant="FillTealA70001"
+                      onClick={() => onClickHint(2)}
+                    >
+                      테스트케이스
                     </Button>
                   </div>
                 </div>
@@ -317,6 +339,15 @@ const Battle = () => {
           </div>
         </div>
       </div>
+      {hintModal.isVisible && (
+        <HintModal
+          hint={hint === null ? "더 이상 힌트를 이용할 수 없습니다." : hint} // Pass the hint string to the modal
+          onClose={() => {
+            hintModal.closeModal();
+            setHint("로딩중..");
+          }}
+        />
+      )}
     </>
   );
 };
