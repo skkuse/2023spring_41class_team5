@@ -23,7 +23,12 @@ const Battle = () => {
   const [code, setCode] = React.useState(
     `function add(a, b) {\n  return a + b;\n}`
   );
-  const [remainingTime, setRemainingTime] = useState(60 * 30);
+  const now = new Date();
+  const matchingTime = new Date(match.createdAt);
+
+  const serverRemainingTime =
+    (matchingTime.getTime() + 60 * 30 - now.getTime()) / 1000;
+  const [remainingTime, setRemainingTime] = useState(serverRemainingTime);
 
   const healthCheck = async () => {
     try {
@@ -42,6 +47,15 @@ const Battle = () => {
     }
   };
 
+  const timeCounter = () => {
+    const intervalId = setInterval(() => {
+      setRemainingTime((time) => time - 1);
+    }, 1000);
+    return () => clearInterval(intervalId);
+  };
+  useEffect(() => {
+    timeCounter();
+  }, []);
   useEffect(() => {
     const intervalId = setInterval(async () => {
       await healthCheck();
@@ -125,7 +139,9 @@ const Battle = () => {
               as="h2"
               variant="h2"
             >
-              19:17
+              {`${Math.trunc(remainingTime / 60)}:${String(
+                Math.trunc(remainingTime % 60)
+              ).padStart(2, "0")}`}
             </Text>
           </div>
           <div className="bg-blue_gray_900_01 border border-gray_600 border-solid flex flex-col gap-[5px] justify-start mb-[9px] ml-5 md:ml-[0] pb-4 px-4 rounded-[5px]">
