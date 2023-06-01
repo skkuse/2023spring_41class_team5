@@ -3,6 +3,7 @@ import Routes from "./Routes";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import { login } from "store/reducer";
+import { API_BASE_URL } from "api";
 
 function App() {
   const token = localStorage.getItem("token");
@@ -10,7 +11,7 @@ function App() {
   useEffect(() => {
     if (token) {
       axios
-        .get(`http://localhost:3000/user`, {
+        .get(`${API_BASE_URL}/user`, {
           headers: {
             Authorization: `${token}`,
           },

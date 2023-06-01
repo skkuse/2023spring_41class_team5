@@ -5,8 +5,12 @@ import Feedback from "components/Feedback/Feedback";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { io } from "socket.io-client";
+import { useSelector } from "react-redux";
+import { API_BASE_URL } from "api";
 const Battle = () => {
-  const socket = io("http://localhost:3000", {
+  const user = useSelector((state) => state.user);
+
+  const socket = io(`${API_BASE_URL}`, {
     cors: {
       origin: "*",
     },
@@ -19,11 +23,13 @@ const Battle = () => {
   const [code, setCode] = React.useState(
     `function add(a, b) {\n  return a + b;\n}`
   );
+  const [remainingTime, setRemainingTime] = useState(60 * 30);
 
   const healthCheck = async () => {
     try {
+      console.log("health checking...");
       const res = await axios.get(
-        `http://localhost:3000/match/${match.id}/health-check`,
+        `${API_BASE_URL}/match/${match.id}/health-check`,
         {
           headers: {
             Authorization: `${localStorage.getItem("token")}`, // 토큰 값 사용
@@ -46,6 +52,12 @@ const Battle = () => {
 
   useEffect(() => {
     socket.on("SCORE_UPDATED", (socket) => {
+      const { uid: updatedId, score } = socket;
+      if (user.id === updatedId) return;
+
+      console.log(socket, user.id, updatedId);
+    });
+    socket.on("MATCH_ENDED", (socket) => {
       console.log(socket);
     });
   });
@@ -54,6 +66,7 @@ const Battle = () => {
     if (match === null) {
       navigate("/", { replace: true });
     } else {
+      console.log(match);
       socket.on("connect", () => {
         socket.emit("JOIN_ROOM", match.id);
       });
@@ -64,7 +77,7 @@ const Battle = () => {
   const onSubmitCode = () => {
     axios
       .post(
-        `http://localhost:3000/match/${match.id}/submit`,
+        `${API_BASE_URL}/match/${match.id}/submit`,
         { code: `${code}` },
         {
           headers: {

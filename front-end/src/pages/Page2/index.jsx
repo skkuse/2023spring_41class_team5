@@ -3,6 +3,7 @@ import axios from "axios";
 import { Text } from "components";
 import { useNavigate } from "react-router";
 import LoadingBar from "components/LoadingBar/LoadingBar";
+import { API_BASE_URL } from "api";
 
 const Page2 = () => {
   const isLoggedIn = localStorage.getItem("token");
@@ -11,7 +12,7 @@ const Page2 = () => {
 
   const getNewMatch = async () => {
     try {
-      const res = await axios.get("http://localhost:3000/match/new-match", {
+      const res = await axios.get(`${API_BASE_URL}/match/new-match`, {
         headers: {
           Authorization: `${localStorage.getItem("token")}`, // 토큰 값 사용
         },

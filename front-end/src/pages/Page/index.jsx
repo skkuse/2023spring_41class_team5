@@ -5,6 +5,7 @@ import Banner from "components/Banner";
 import ServiceIntro from "components/Home/ServiceIntro";
 import HistoryTable from "components/Home/Histories/HistoryTable";
 import { useSelector } from "react-redux";
+import { API_BASE_URL } from "api";
 
 const Page = () => {
   const { id } = useSelector((state) => state.user);
@@ -12,7 +13,7 @@ const Page = () => {
   const [currentTab, setCurrentTab] = useState(0);
 
   useEffect(() => {
-    fetch("http://localhost:3000/match/history", {
+    fetch(`${API_BASE_URL}/match/history`, {
       headers: {
         Authorization: "3948abcd", // 이거로 대체하면 됨 ${localStorage.getItem('token')}
       },
