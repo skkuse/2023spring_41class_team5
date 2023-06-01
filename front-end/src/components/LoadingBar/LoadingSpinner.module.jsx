@@ -1,5 +1,5 @@
 import React from "react";
-import style from "./LoadingBar.module.css";
+import style from "./LoadingSpinner.module.css";
 const LoadingBar = () => {
   return <span className={style.loader}></span>;
 };
