@@ -19,7 +19,9 @@ function App() {
         .then(({ data }) => {
           dispatch(login(data));
         })
-        .catch((err) => console.log(err));
+        .catch(() => {
+          localStorage.removeItem("token");
+        });
     }
   }, [token, dispatch]);
 

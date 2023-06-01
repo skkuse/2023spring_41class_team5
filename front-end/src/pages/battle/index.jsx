@@ -1,4 +1,4 @@
-import { Button, Img, Text } from "components";
+import { Button, HintModal, Img, Text } from "components";
 import React, { useEffect, useState } from "react";
 import CodeEditor from "@uiw/react-textarea-code-editor";
 import Feedback from "components/Feedback/Feedback";
@@ -7,22 +7,34 @@ import axios from "axios";
 import { io } from "socket.io-client";
 import { useSelector } from "react-redux";
 import { API_BASE_URL } from "api";
+import { useModal } from "components/HintModal/useModal";
 const Battle = () => {
   const user = useSelector((state) => state.user);
+  const [socket, setSocket] = useState(null);
+  const hintModal = useModal();
 
-  const socket = io(`${API_BASE_URL}`, {
-    cors: {
-      origin: "*",
-    },
-  });
+  useEffect(() => {
+    const socket = io(`${API_BASE_URL}`, {
+      cors: {
+        origin: "*",
+      },
+    });
+    setSocket(socket);
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
 
   const location = useLocation();
   const navigate = useNavigate();
   const match = location.state;
+
   const [submitResult, setSubmitResult] = useState(null);
   const [opponentScore, setOpponentScore] = useState(0);
   const [isGameOver, setIsGameOver] = useState(false);
-
+  const [isWin, setIsWin] = useState(null);
+  const [timer, setTimer] = useState(null);
+  const [healthChecker, setHealthChecker] = useState(null);
   const [code, setCode] = React.useState(
     `function add(a, b) {\n  return a + b;\n}`
   );
@@ -30,12 +42,11 @@ const Battle = () => {
   const matchingTime = new Date(match.createdAt);
 
   const serverRemainingTime =
-    (matchingTime.getTime() + 60 * 30 - now.getTime()) / 1000;
+    (matchingTime.getTime() + 60 * 30 * 1000 - now.getTime()) / 1000;
   const [remainingTime, setRemainingTime] = useState(serverRemainingTime);
 
   const healthCheck = async () => {
     try {
-      console.log("health checking...");
       const res = await axios.get(
         `${API_BASE_URL}/match/${match.id}/health-check`,
         {
@@ -50,47 +61,51 @@ const Battle = () => {
     }
   };
 
-  // console.log("hello");
-
-  // useEffect(() => {
-  //   const intervalId = setInterval(() => {
-  //     setRemainingTime((time) => time - 1);
-  //   }, 1000);
-
-  //   return () => clearInterval(intervalId);
-  // }, []);
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      if (isWin !== null) return;
+      setRemainingTime((time) => time - 1);
+    }, 1000);
+    setTimer(intervalId);
+    return () => clearInterval(intervalId);
+  }, []);
 
   useEffect(() => {
     const intervalId = setInterval(async () => {
       await healthCheck();
     }, 60000);
-
+    setHealthChecker(intervalId);
     return () => clearInterval(intervalId);
   }, []);
 
   useEffect(() => {
+    if (socket === null) return;
     socket.on("SCORE_UPDATED", (socket) => {
       const { uid: updatedId, score } = socket;
       if (user.id === updatedId) return;
       setOpponentScore(score);
     });
     socket.on("MATCH_ENDED", (socket) => {
+      const { win: winUser } = socket;
+      clearInterval(timer);
+      clearInterval(healthChecker);
       setIsGameOver(true);
-      console.log(socket);
+      getFeedback();
+      setIsWin(winUser === user.id);
     });
-  });
+  }, [socket, timer]);
 
   useEffect(() => {
     if (match === null) {
       navigate("/", { replace: true });
     } else {
-      console.log(match);
+      if (socket === null) return;
       socket.on("connect", () => {
         socket.emit("JOIN_ROOM", match.id);
       });
       socket.connect();
     }
-  }, [match, navigate]);
+  }, [match, navigate, socket]);
 
   const onSubmitCode = () => {
     axios
@@ -107,24 +122,45 @@ const Battle = () => {
         setSubmitResult(data.score);
       });
   };
-  const feedback = `<>
-                      알고리즘 부분:                      <br />                      코드의 실행 시간이 상당히 오래 걸렸습니다. 특히 입력
-                      크기가 큰 경우에는 성능이 저하될 수 있습니다.
-                      <br />
-                      일부 반복문이 중복되거나 비효율적으로 작성되었습니다. 이로
-                      인해 코드가 더 길어지고 가독성이 떨어집니다.
-                      <br />
-                      코드 간결성 부분:
-                      <br />
-                      변수명이 명확하지 않거나 일관성이 없습니다. 변수 이름을 더
-                      명확하고 의미 있는 단어로 선택하는 것이 좋습니다.
-                      <br />
-                      코드가 길고 복잡해 보입니다. 불필요한 중첩이나 복잡한
-                      조건문을 줄이고, 코드를 간결하게 리팩토링하는 것이
-                      좋습니다.
-                    </>`;
+
+  const [feedback, setFeedback] = useState("");
+  const getFeedback = () => {
+    axios
+      .post(
+        `${API_BASE_URL}/match/${match.id}/feedback`,
+        { code: `${code}` },
+        {
+          headers: {
+            Authorization: `${localStorage.getItem("token")}`, // 토큰 값 사용
+          },
+        }
+      )
+      .then(({ data }) => {
+        setFeedback(data.feedback);
+      });
+  };
+  const [hint, setHint] = useState("로딩중..");
+  const onClickHint = (type) => {
+    hintModal.openModal(hint);
+    axios
+      .post(
+        `${API_BASE_URL}/match/${match.id}/hint`,
+        { code: `${code}`, type: type },
+        {
+          headers: {
+            Authorization: `${localStorage.getItem("token")}`, // 토큰 값 사용
+          },
+        }
+      )
+      .then(({ data }) => {
+        setHint(data.hint);
+      })
+      .catch(() => {
+        setHint("서버 에러");
+      });
+  };
   return isGameOver ? (
-    <Feedback code={code} feedback={feedback} />
+    <Feedback code={code} feedback={feedback} isWin={isWin} />
   ) : (
     <>
       <div className="flex flex-col items-start justify-start max-w-[1156px] mx-auto md:px-5 w-full mt-5">
@@ -185,24 +221,27 @@ const Battle = () => {
                       shape="RoundedBorder5"
                       size="sm"
                       variant="FillTealA70001"
+                      onClick={() => onClickHint(0)}
                     >
-                      질문
+                      에러 찾기
                     </Button>
                     <Button
                       className="bg-blue-700 cursor-pointer font-normal leading-[normal] min-w-[151px] text-center text-white_A700 text-l"
                       shape="RoundedBorder5"
                       size="sm"
                       variant="FillTealA70001"
-                    >
-                      먹물 30초
-                    </Button>
-                    <Button
-                      className="bg-blue-700 cursor-pointer font-normal leading-[normal] min-w-[151px] text-center text-white_A700 text-l"
-                      shape="RoundedBorder5"
-                      size="sm"
-                      variant="FillTealA70001"
+                      onClick={() => onClickHint(1)}
                     >
                       다음 줄 작성
+                    </Button>
+                    <Button
+                      className="bg-blue-700 cursor-pointer font-normal leading-[normal] min-w-[151px] text-center text-white_A700 text-l"
+                      shape="RoundedBorder5"
+                      size="sm"
+                      variant="FillTealA70001"
+                      onClick={() => onClickHint(2)}
+                    >
+                      테스트케이스
                     </Button>
                   </div>
                 </div>
@@ -279,9 +318,6 @@ const Battle = () => {
                   shape="RoundedBorder5"
                   size="sm"
                   variant="FillTealA70001"
-                  onClick={() => {
-                    console.log(socket);
-                  }}
                 >
                   코드 실행
                 </Button>
@@ -295,9 +331,6 @@ const Battle = () => {
                   onClick={() => {
                     onSubmitCode();
                   }}
-                  // onClick={() => {
-                  //   setIsGameOver(true);
-                  // }}
                 >
                   제출
                 </Button>
@@ -306,6 +339,15 @@ const Battle = () => {
           </div>
         </div>
       </div>
+      {hintModal.isVisible && (
+        <HintModal
+          hint={hint === null ? "더 이상 힌트를 이용할 수 없습니다." : hint} // Pass the hint string to the modal
+          onClose={() => {
+            hintModal.closeModal();
+            setHint("로딩중..");
+          }}
+        />
+      )}
     </>
   );
 };

@@ -1,7 +1,7 @@
 import { Button, Img, Text } from "components";
 import React from "react";
 
-const Result = ({ onClickFeedback }) => {
+const Result = ({ onClickFeedback, isWin }) => {
   return (
     <>
       <div className="bg-blue_gray_900 flex flex-col font-dnfbitbitotf items-center justify-end mx-auto w-full">
@@ -25,7 +25,7 @@ const Result = ({ onClickFeedback }) => {
                 as="h1"
                 variant="h1"
               >
-                YOU WIN !!
+                {isWin ? "YOU WIN !!" : "YOU LOSE.."}
               </Text>
               <Button
                 className="bg-blue-500 cursor-pointer font-normal leading-[normal] min-w-[151px] text-center text-white_A700 text-l"

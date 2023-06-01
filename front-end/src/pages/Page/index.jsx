@@ -15,7 +15,7 @@ const Page = () => {
   useEffect(() => {
     fetch(`${API_BASE_URL}/match/history`, {
       headers: {
-        Authorization: "3948abcd", // 이거로 대체하면 됨 ${localStorage.getItem('token')}
+        Authorization: `${localStorage.getItem("token")}`,
       },
     })
       .then((response) => response.json())

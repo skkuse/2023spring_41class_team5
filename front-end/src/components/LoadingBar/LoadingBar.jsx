@@ -1,7 +1,7 @@
 import React from "react";
-import "./LoadingBar.css";
+import style from "./LoadingBar.module.css";
 const LoadingBar = () => {
-  return <span class="loader"></span>;
+  return <span className={style.loader}></span>;
 };
 
 export default LoadingBar;
