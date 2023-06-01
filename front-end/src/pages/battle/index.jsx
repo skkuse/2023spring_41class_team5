@@ -9,12 +9,16 @@ import { useSelector } from "react-redux";
 import { API_BASE_URL } from "api";
 const Battle = () => {
   const user = useSelector((state) => state.user);
+  const [socket, setSocket] = useState(null);
 
-  const socket = io(`${API_BASE_URL}`, {
-    cors: {
-      origin: "*",
-    },
-  });
+  useEffect(() => {
+    const socket = io(`${API_BASE_URL}`, {
+      cors: {
+        origin: "*",
+      },
+    });
+    setSocket(socket);
+  }, []);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -50,15 +54,13 @@ const Battle = () => {
     }
   };
 
-  // console.log("hello");
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setRemainingTime((time) => time - 1);
+    }, 1000);
 
-  // useEffect(() => {
-  //   const intervalId = setInterval(() => {
-  //     setRemainingTime((time) => time - 1);
-  //   }, 1000);
-
-  //   return () => clearInterval(intervalId);
-  // }, []);
+    return () => clearInterval(intervalId);
+  }, []);
 
   useEffect(() => {
     const intervalId = setInterval(async () => {
@@ -69,6 +71,7 @@ const Battle = () => {
   }, []);
 
   useEffect(() => {
+    if (socket === null) return;
     socket.on("SCORE_UPDATED", (socket) => {
       const { uid: updatedId, score } = socket;
       if (user.id === updatedId) return;
@@ -78,19 +81,20 @@ const Battle = () => {
       setIsGameOver(true);
       console.log(socket);
     });
-  });
+  }, [socket]);
 
   useEffect(() => {
     if (match === null) {
       navigate("/", { replace: true });
     } else {
       console.log(match);
+      if (socket === null) return;
       socket.on("connect", () => {
         socket.emit("JOIN_ROOM", match.id);
       });
       socket.connect();
     }
-  }, [match, navigate]);
+  }, [match, navigate, socket]);
 
   const onSubmitCode = () => {
     axios
