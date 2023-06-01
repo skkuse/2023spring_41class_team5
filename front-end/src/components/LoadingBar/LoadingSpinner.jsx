@@ -1,7 +1,7 @@
 import React from "react";
 import style from "./LoadingSpinner.module.css";
-const LoadingBar = () => {
+const LoadingSpinner = () => {
   return <span className={style.loader}></span>;
 };
 
-export default LoadingBar;
+export default LoadingSpinner;

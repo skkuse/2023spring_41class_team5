@@ -4,6 +4,7 @@ import CodeEditor from "@uiw/react-textarea-code-editor";
 import Result from "./Result";
 import { useNavigate } from "react-router";
 import MDEditor from "@uiw/react-md-editor";
+import LoadingSpinner from "components/LoadingBar/LoadingSpinner";
 const Feedback = ({ code, feedback, isWin }) => {
   const [isClicked, setIsClicked] = useState(false);
   const navigate = useNavigate();
@@ -68,10 +69,14 @@ const Feedback = ({ code, feedback, isWin }) => {
                   >
                     피드백
                   </Text>
-                  <MDEditor.Markdown
-                    className="bg-neutral-800 p-4 font-pretendard mb-[67px] ml-1.5 md:ml-[0] text-white_A700"
-                    source={feedback}
-                  />
+                  {feedback === "" ? (
+                    <LoadingSpinner />
+                  ) : (
+                    <MDEditor.Markdown
+                      className="bg-neutral-800 p-4 font-pretendard mb-[67px] ml-1.5 md:ml-[0] text-white_A700"
+                      source={feedback}
+                    />
+                  )}
                 </div>
               </div>
               <Button
