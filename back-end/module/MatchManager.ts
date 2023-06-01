@@ -91,6 +91,8 @@ class MatchManagerClass {
         callback()
         this.deleteMatch(mid)
       }, HEALTH_CHECK_TIMEOUT)
+    } else {
+      console.error('health check uid not matching')
     }
   }
 }

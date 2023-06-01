@@ -21,6 +21,7 @@ class SocketManagerClass {
   ) {
     if (!this.socket) return
     console.log(`emit ${type} event to ${mid}`)
+    console.log(params)
     this.socket.in(mid.toString()).emit(type, params)
   }
 }
