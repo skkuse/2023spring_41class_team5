@@ -73,6 +73,7 @@ class MatchManagerClass {
     if (idx === -1) return
     clearTimeout(this.match[idx].timer1)
     clearTimeout(this.match[idx].timer2)
+    clearTimeout(this.match[idx].endTimer)
     this.match.splice(idx, 1)
   }
   healthCheck(mid: number, uid: number, callback: () => void) {
@@ -86,10 +87,12 @@ class MatchManagerClass {
       }, HEALTH_CHECK_TIMEOUT)
     } else if (target.uid2 === uid) {
       clearTimeout(target.timer2)
-      target.timer1 = setTimeout(() => {
+      target.timer2 = setTimeout(() => {
         callback()
         this.deleteMatch(mid)
       }, HEALTH_CHECK_TIMEOUT)
+    } else {
+      console.error('health check uid not matching')
     }
   }
 }

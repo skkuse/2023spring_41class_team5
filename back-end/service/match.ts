@@ -182,7 +182,6 @@ const getMatchListByUserId = async (uid: number) => {
     created_at: string
     is_user1: number
   }[]
-  console.log(data)
   conn.release()
   return data.map((i) => ({
     id: i.id,

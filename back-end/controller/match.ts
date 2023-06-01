@@ -63,6 +63,7 @@ const healthCheck = async (req: Request, res: Response) => {
   if (!uid) return
   const mid = parseInt(req.params.mid)
   if (!mid) return res.status(404).json({ message: 'No Such Matching' })
+  console.log(`health check ${mid} ${uid}`)
   MatchManager.healthCheck(mid, uid, () => {
     MatchService.updateMatchStatus(mid, -1)
     SocketManager.emitEvent(mid, 'MATCH_ENDED', {
