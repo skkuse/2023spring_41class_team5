@@ -31,7 +31,8 @@ const Battle = () => {
   const [opponentScore, setOpponentScore] = useState(0);
   const [isGameOver, setIsGameOver] = useState(false);
   const [isWin, setIsWin] = useState(null);
-
+  const [timer, setTimer] = useState(null);
+  const [healthChecker, setHealthChecker] = useState(null);
   const [code, setCode] = React.useState(
     `function add(a, b) {\n  return a + b;\n}`
   );
@@ -57,22 +58,22 @@ const Battle = () => {
       console.error(error);
     }
   };
-  console.log("heello");
+
   useEffect(() => {
     const intervalId = setInterval(() => {
-      if (isGameOver) return;
+      if (isWin !== null) return;
+      console.log("timer");
       setRemainingTime((time) => time - 1);
     }, 1000);
-
+    setTimer(intervalId);
     return () => clearInterval(intervalId);
   }, []);
 
   useEffect(() => {
     const intervalId = setInterval(async () => {
-      if (isGameOver) return;
       await healthCheck();
     }, 60000);
-
+    setHealthChecker(intervalId);
     return () => clearInterval(intervalId);
   }, []);
 
@@ -85,11 +86,13 @@ const Battle = () => {
     });
     socket.on("MATCH_ENDED", (socket) => {
       const { win: winUser } = socket;
+      clearInterval(timer);
+      clearInterval(healthChecker);
+      setIsGameOver(true);
       getFeedback();
       setIsWin(winUser === user.id);
-      setIsGameOver(true);
     });
-  }, [socket]);
+  }, [socket, timer]);
 
   useEffect(() => {
     if (match === null) {
@@ -321,9 +324,6 @@ const Battle = () => {
                   onClick={() => {
                     onSubmitCode();
                   }}
-                  // onClick={() => {
-                  //   setIsGameOver(true);
-                  // }}
                 >
                   제출
                 </Button>
