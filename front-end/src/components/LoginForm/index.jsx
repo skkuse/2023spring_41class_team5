@@ -9,15 +9,10 @@ import { API_BASE_URL } from "api";
 function LoginForm() {
   const dispatch = useDispatch();
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
-  };
-
-  const handlePasswordChange = (e) => {
-    setPassword(e.target.value);
   };
 
   const handleSubmit = async (e) => {
@@ -43,14 +38,7 @@ function LoginForm() {
   return (
     <div className="signup-form-container">
       <form onSubmit={handleSubmit} className="login-form">
-        <Input label="Email: " value={email} onChange={handleEmailChange} />
-
-        <Input
-          label="Password: "
-          type="password"
-          value={password}
-          onChange={handlePasswordChange}
-        />
+        <Input label="아이디: " value={email} onChange={handleEmailChange} />
 
         <Button
           className="w-full"
