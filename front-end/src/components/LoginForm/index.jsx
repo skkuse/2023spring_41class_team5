@@ -4,6 +4,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "store/reducer";
+import { API_BASE_URL } from "api";
 
 function LoginForm() {
   const dispatch = useDispatch();
@@ -22,11 +23,11 @@ function LoginForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.get(`http://localhost:3000/auth/${email}`);
+      const res = await axios.get(`${API_BASE_URL}/auth/${email}`);
 
       const { token } = res.data;
       localStorage.setItem("token", token);
-      const user = await axios.get(`http://localhost:3000/user`, {
+      const user = await axios.get(`${API_BASE_URL}/user`, {
         headers: {
           Authorization: `${token}`,
         },

@@ -3,29 +3,31 @@ import axios from "axios";
 import { Text } from "components";
 import { useNavigate } from "react-router";
 import LoadingBar from "components/LoadingBar/LoadingBar";
-import io from "socket.io-client";
-
-const socket = io("http://localhost:3000"); // replace this with your server address
+import { API_BASE_URL } from "api";
 
 const Page2 = () => {
+  const isLoggedIn = localStorage.getItem("token");
   const navigate = useNavigate();
   const [match, setMatch] = useState(null);
 
   const getNewMatch = async () => {
-    console.log("getNewMatch started ");
-
     try {
-      const res = await axios.get("http://localhost:3000/match/new-match", {
+      const res = await axios.get(`${API_BASE_URL}/match/new-match`, {
         headers: {
           Authorization: `${localStorage.getItem("token")}`, // 토큰 값 사용
         },
       });
-      console.log("getNewMatch: ", res.data);
       return res.data;
     } catch (error) {
       console.error(error);
     }
   };
+
+  useEffect(() => {
+    if (!isLoggedIn) {
+      navigate("/", { replace: true });
+    }
+  }, [isLoggedIn]);
 
   useEffect(() => {
     const intervalId = setInterval(async () => {
@@ -41,8 +43,7 @@ const Page2 = () => {
 
   useEffect(() => {
     if (match !== null) {
-      socket.emit("join", { roomId: match.id }); // match should have an id property
-      navigate("/battle", { replace: true });
+      navigate("/battle", { replace: true, state: { ...match } });
     }
   }, [match, navigate]);
 

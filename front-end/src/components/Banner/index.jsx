@@ -3,6 +3,31 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 const Banner = () => {
+  const isLoggedIn = localStorage.getItem("token");
+  const loginBtn = (
+    <Link to="page5">
+      <Button
+        className="cursor-pointer font-bold leading-[normal] min-w-[204px] mt-[13px] text-[15px] text-black_900 text-center"
+        shape="RoundedBorder5"
+        size="sm"
+        variant="FillWhiteA700"
+      >
+        로그인하고 매칭 시작하기
+      </Button>
+    </Link>
+  );
+  const matchingBtn = (
+    <Link to="page2">
+      <Button
+        className="cursor-pointer font-bold leading-[normal] min-w-[204px] mt-[13px] text-[15px] text-black_900 text-center"
+        shape="RoundedBorder5"
+        size="sm"
+        variant="FillWhiteA700"
+      >
+        매칭 시작하기
+      </Button>
+    </Link>
+  );
   return (
     <div className="bg-gray_900 flex flex-col items-center justify-end p-[27px] sm:px-5 w-full">
       <div className="flex md:flex-col flex-row gap-[23px] items-start justify-start max-w-[1092px] mt-9 mx-auto md:px-5 w-full">
@@ -40,16 +65,7 @@ const Banner = () => {
               className="h-[45px]"
               alt="twitter_Two"
             />
-            <Link to="page2">
-              <Button
-                className="cursor-pointer font-bold leading-[normal] min-w-[204px] mt-[13px] text-[15px] text-black_900 text-center"
-                shape="RoundedBorder5"
-                size="sm"
-                variant="FillWhiteA700"
-              >
-                로그인하고 매칭 시작하기
-              </Button>
-            </Link>
+            {isLoggedIn ? matchingBtn : loginBtn}
           </div>
         </div>
         <div className="flex md:flex-1 flex-col gap-2 justify-start md:mt-0 mt-[52px] w-[14%] md:w-full">

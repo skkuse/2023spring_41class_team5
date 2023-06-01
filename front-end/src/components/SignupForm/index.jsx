@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Input, Button } from "components";
 import axios from "axios";
+import { API_BASE_URL } from "api";
 
 function SignupForm() {
   const [email, setEmail] = useState("");
@@ -28,7 +29,7 @@ function SignupForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.post("http://localhost:3000/auth/new-user").then(({ data }) => {
+    axios.post(`${API_BASE_URL}/auth/new-user`).then(({ data }) => {
       alert(`새로 생성된 아이디는 ${data.id} 입니다.`);
     });
   };
