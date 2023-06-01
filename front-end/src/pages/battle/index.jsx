@@ -20,6 +20,7 @@ const Battle = () => {
   const navigate = useNavigate();
   const match = location.state;
   const [submitResult, setSubmitResult] = useState(null);
+  const [opponentScore, setOpponentScore] = useState(0);
   const [code, setCode] = React.useState(
     `function add(a, b) {\n  return a + b;\n}`
   );
@@ -53,9 +54,11 @@ const Battle = () => {
     }, 1000);
     return () => clearInterval(intervalId);
   };
+
   useEffect(() => {
     timeCounter();
   }, []);
+
   useEffect(() => {
     const intervalId = setInterval(async () => {
       await healthCheck();
@@ -68,7 +71,7 @@ const Battle = () => {
     socket.on("SCORE_UPDATED", (socket) => {
       const { uid: updatedId, score } = socket;
       if (user.id === updatedId) return;
-
+      setOpponentScore(score);
       console.log(socket, user.id, updatedId);
     });
     socket.on("MATCH_ENDED", (socket) => {
@@ -157,7 +160,7 @@ const Battle = () => {
               as="h2"
               variant="h2"
             >
-              62%
+              {opponentScore}%
             </Text>
           </div>
           <div className="sm:h-[253px] md:h-[88px] h-[89px] md:ml-[0] ml-[57px] relative w-[46%] md:w-full">
