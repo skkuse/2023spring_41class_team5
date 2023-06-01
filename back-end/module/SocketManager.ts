@@ -9,7 +9,8 @@ class SocketManagerClass {
     this.socket = new Server(server, { cors: { origin: '*' } })
     this.socket.on('connection', (socket) => {
       socket.on('JOIN_ROOM', (id) => {
-        socket.join(id)
+        console.log('join room :', id)
+        socket.join(id.toString())
       })
     })
   }
@@ -19,6 +20,7 @@ class SocketManagerClass {
     params: any
   ) {
     if (!this.socket) return
+    console.log(`emit ${type} event to ${mid}`)
     this.socket.in(mid.toString()).emit(type, params)
   }
 }
