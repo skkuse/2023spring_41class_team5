@@ -1,64 +1,27 @@
-import React, { useState } from "react";
-import { Input, Button } from "components";
+import React from "react";
+import { Button, HintModal } from "components";
 import axios from "axios";
 import { API_BASE_URL } from "api";
+import { useModal } from './useModal';
 
 function SignupForm() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [passwordConfirm, setPasswordConfirm] = useState("");
-  const [isMismatch, setMismatch] = useState(false);
-
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value);
-  };
-
-  const handlePasswordChange = (e) => {
-    setPassword(e.target.value);
-    checkPasswordMatch(e.target.value, passwordConfirm);
-  };
-
-  const handlePasswordConfirmChange = (e) => {
-    setPasswordConfirm(e.target.value);
-    checkPasswordMatch(password, e.target.value);
-  };
-
-  const checkPasswordMatch = (password, passwordConfirm) => {
-    setMismatch(password !== passwordConfirm);
-  };
-
+  const hintModal = useModal();
   const handleSubmit = (e) => {
     e.preventDefault();
     axios.post(`${API_BASE_URL}/auth/new-user`).then(({ data }) => {
-      alert(`새로 생성된 아이디는 ${data.id} 입니다.`);
+      hintModal.openModal(`아이디는 다음과 같습니다: ${data.id}`)
     });
   };
 
   return (
     <div className="signup-form-container">
+      {hintModal.isVisible && (
+        <HintModal
+          hint={hintModal.modalData} // Pass the hint string to the modal
+          onClose={hintModal.closeModal}
+        />
+      )}
       <form onSubmit={handleSubmit} className="signup-form">
-        <Input
-          label="Email: "
-          type="email"
-          value={email}
-          onChange={handleEmailChange}
-        />
-
-        <Input
-          label="Password: "
-          type="password"
-          value={password}
-          className={isMismatch ? "password-mismatch" : ""}
-          onChange={handlePasswordChange}
-        />
-
-        <Input
-          label="Confirm Password: "
-          type="password"
-          value={passwordConfirm}
-          className={isMismatch ? "password-mismatch" : ""}
-          onChange={handlePasswordConfirmChange}
-        />
 
         <Button
           className="w-full"

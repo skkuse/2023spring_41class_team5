@@ -6,7 +6,7 @@ const HintModal = ({ hint, onClose }) => {
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black bg-opacity-50">
             <div className="bg-white rounded-md p-6 w-full max-w-md">
-                <Text variant="body1">{hint}</Text>
+                <Text variant="h3">{hint}</Text>
                 <div className="mt-4 flex justify-center">
                     <Button
                         shape="RoundedBorder5"
