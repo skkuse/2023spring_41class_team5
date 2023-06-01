@@ -18,13 +18,16 @@ const Battle = () => {
       },
     });
     setSocket(socket);
+    return () => {
+      socket.disconnect();
+    };
   }, []);
 
   const location = useLocation();
   const navigate = useNavigate();
   const match = location.state;
   const [submitResult, setSubmitResult] = useState(null);
-  const [opponentScore, setOpponentScore] = useState(0);
+  const [opponentScore, setOpponentScore] = useState(-100);
   const [isGameOver, setIsGameOver] = useState(false);
 
   const [code, setCode] = React.useState(
@@ -80,6 +83,7 @@ const Battle = () => {
     socket.on("MATCH_ENDED", (socket) => {
       setIsGameOver(true);
       console.log(socket);
+      socket.disconnect();
     });
   }, [socket]);
 
