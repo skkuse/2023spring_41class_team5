@@ -1,12 +1,15 @@
 import React, { useState } from "react";
-import { Input, Button } from "components";
+import { Input, Button, HintModal } from "components";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "store/reducer";
 import { API_BASE_URL } from "api";
+import { useModal } from './useModal';
 
 function LoginForm() {
+  const hintModal = useModal();
+
   const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const navigate = useNavigate();
@@ -31,12 +34,20 @@ function LoginForm() {
       dispatch(login(user.data));
       navigate("/", { replace: true });
     } catch (error) {
+      hintModal.openModal("그런 아이디는 없습니다!")
       console.error(error);
     }
   };
 
   return (
     <div className="signup-form-container">
+      {hintModal.isVisible && (
+        <HintModal
+          // ... other props ...
+          hint={hintModal.modalData} // Pass the hint string to the modal
+          onClose={hintModal.closeModal}
+        />
+      )}
       <form onSubmit={handleSubmit} className="login-form">
         <Input label="아이디: " value={email} onChange={handleEmailChange} />
 

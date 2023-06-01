@@ -1,19 +1,26 @@
 import React from "react";
-import { Button } from "components";
+import { Button, HintModal } from "components";
 import axios from "axios";
 import { API_BASE_URL } from "api";
+import { useModal } from './useModal';
 
 function SignupForm() {
-
+  const hintModal = useModal();
   const handleSubmit = (e) => {
     e.preventDefault();
     axios.post(`${API_BASE_URL}/auth/new-user`).then(({ data }) => {
-      alert(`새로 생성된 아이디는 ${data.id} 입니다.`);
+      hintModal.openModal(`아이디는 다음과 같습니다: ${data.id}`)
     });
   };
 
   return (
     <div className="signup-form-container">
+      {hintModal.isVisible && (
+        <HintModal
+          hint={hintModal.modalData} // Pass the hint string to the modal
+          onClose={hintModal.closeModal}
+        />
+      )}
       <form onSubmit={handleSubmit} className="signup-form">
 
         <Button
