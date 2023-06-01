@@ -6,6 +6,7 @@ const config = {
   password: process.env.DB_PASSWORD,
   database: 'test',
   connectTimeout: 10000,
+  timezone: 'Asia/Seoul',
 }
 
 const pool = mysql.createPool(config)
