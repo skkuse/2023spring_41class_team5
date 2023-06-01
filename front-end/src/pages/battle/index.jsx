@@ -40,7 +40,7 @@ const Battle = () => {
   const matchingTime = new Date(match.createdAt);
 
   const serverRemainingTime =
-    (matchingTime.getTime() + 60 * 30 - now.getTime()) / 1000;
+    (matchingTime.getTime() + 60 * 30 * 1000 - now.getTime()) / 1000;
   const [remainingTime, setRemainingTime] = useState(serverRemainingTime);
 
   const healthCheck = async () => {
