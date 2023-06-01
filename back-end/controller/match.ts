@@ -37,6 +37,13 @@ const getNewMatch = async (req: Request, res: Response) => {
           win: null,
           disconnected: uid,
         })
+      },
+      () => {
+        MatchService.updateMatchStatus(mid, -1)
+        SocketManager.emitEvent(mid, 'MATCH_ENDED', {
+          win: null,
+          disconnected: null,
+        })
       }
     )
     const newMatch = await MatchService.getMatchById(mid)
@@ -54,8 +61,9 @@ const getNewMatch = async (req: Request, res: Response) => {
 const healthCheck = async (req: Request, res: Response) => {
   const uid = req.user
   if (!uid) return
-  const mid = parseInt(req.params.id)
+  const mid = parseInt(req.params.mid)
   if (!mid) return res.status(404).json({ message: 'No Such Matching' })
+  console.log(`health check ${mid} ${uid}`)
   MatchManager.healthCheck(mid, uid, () => {
     MatchService.updateMatchStatus(mid, -1)
     SocketManager.emitEvent(mid, 'MATCH_ENDED', {

@@ -21,7 +21,7 @@ const getProblemByMatchId = async (mid: number) => {
   }
 }
 const getMatchById = async (mid: number) => {
-  const sql = `SELECT m.id as id, p.id as pid, p.title as ptitle, p.description as pdescription, m.status, 
+  const sql = `SELECT m.id as id, p.id as pid, p.title as ptitle, p.description as pdescription, m.status, m.created_at,
     h1.user_id as user1, h2.user_id as user2 FROM test.match m 
     LEFT JOIN history h1 ON m.history1_id = h1.id 
     LEFT JOIN history h2 ON m.history2_id = h2.id
@@ -35,6 +35,7 @@ const getMatchById = async (mid: number) => {
     pid: number
     ptitle: string
     pdescription: string
+    created_at: string
     status: string
     user1: number
     user2: number
@@ -51,6 +52,7 @@ const getMatchById = async (mid: number) => {
     user1: data[0].user1,
     user2: data[0].user2,
     status: parseInt(data[0].status),
+    createdAt: data[0].created_at,
   }
 }
 
@@ -101,7 +103,7 @@ const createMatch = async (uid1: number, uid2: number, pid: number) => {
 }
 
 const getMatchOnProgress = async (uid: number) => {
-  const sql = `SELECT m.id as id, p.id as pid, p.title as ptitle, p.description as pdescription, m.status as status, 
+  const sql = `SELECT m.id as id, p.id as pid, p.title as ptitle, p.description as pdescription, m.status as status, m.created_at,
     h1.user_id as user1, h2.user_id as user2 FROM test.match m 
     LEFT JOIN history h1 ON m.history1_id = h1.id 
     LEFT JOIN history h2 ON m.history2_id = h2.id
@@ -117,6 +119,7 @@ const getMatchOnProgress = async (uid: number) => {
     ptitle: string
     pdescription: string
     status: string
+    created_at: string
     user1: number
     user2: number
   }[]
@@ -129,6 +132,7 @@ const getMatchOnProgress = async (uid: number) => {
       title: data[0].ptitle,
       description: data[0].pdescription,
     },
+    createdAt: data[0].created_at,
     user1: data[0].user1,
     user2: data[0].user2,
     status: parseInt(data[0].status),
@@ -157,7 +161,7 @@ const updateSummitResult = async (
 
 const getMatchListByUserId = async (uid: number) => {
   const sql = `SELECT m.id as id, p.id as pid, p.title as ptitle, p.description as pdescription,
-    h.code as code, h.score as score, f.result as feedback, m.status as status, m.history1_id=h.id as is_user1
+    h.code as code, h.score as score, f.result as feedback, m.status as status, m.created_at, m.history1_id=h.id as is_user1
     FROM test.match m 
     LEFT JOIN history h ON m.history1_id = h.id OR m.history2_id = h.id
     LEFT JOIN problem p ON m.problem_id = p.id
@@ -175,9 +179,9 @@ const getMatchListByUserId = async (uid: number) => {
     score: number
     feedback: string
     status: string
+    created_at: string
     is_user1: number
   }[]
-  console.log(data)
   conn.release()
   return data.map((i) => ({
     id: i.id,
@@ -189,6 +193,7 @@ const getMatchListByUserId = async (uid: number) => {
     code: i.code,
     score: i.score,
     feedback: i.feedback,
+    createdAt: i.created_at,
     status:
       i.status === '0'
         ? null
@@ -204,9 +209,9 @@ const isMatchOnProgress = async (mid: number) => {
   const params = [mid]
   const conn = await pool.getConnection()
   const [result] = await conn.query(sql, params)
-  const data = result as { status: number }[]
+  const data = result as { status: string }[]
   conn.release()
-  if (data.length && data[0].status === 0) return true
+  if (data.length && data[0].status === '0') return true
   return false
 }
 
